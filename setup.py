@@ -19,7 +19,7 @@ setup(
     description='Console Prompting',
     long_description=readme,
     author='Aubrey Taylor <aubricus@gmail.com>, Adam Venturella <aventurella@gmail.net>',
-    url='https://github.com/blitzagency/blitzcloud',
+    url='https://github.com/aventurella/promptly',
     license=license,
     packages=packages,
     package_data={'': ['LICENSE']},
