@@ -126,6 +126,3 @@ class ChoiceInput(BaseInput):
             raise ValueError
 
         self.value = result[0]
-
-
-
