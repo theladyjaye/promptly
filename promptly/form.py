@@ -12,13 +12,9 @@ class Form(object):
         obj.prefix = self.prefix
         self._fields[key] = obj
 
-    def prompt(self):
+    def run(self):
         for prompt in self._fields.itervalues():
             prompt()
-
-    def values(self):
-        for prompt in self._fields.itervalues():
-            yield prompt.value
 
     def __iter__(self):
         for k, v in self._fields.iteritems():

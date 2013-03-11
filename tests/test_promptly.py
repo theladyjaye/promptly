@@ -44,7 +44,7 @@ class TestPromptly(unittest.TestCase):
             default=1))
 
         form.add('yaks', BooleanInput('Do you like yaks?', default=True))
-        form.prompt()
+        form.run()
 
         d = dict(form)
         print(d)
