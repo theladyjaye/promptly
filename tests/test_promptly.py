@@ -27,7 +27,7 @@ class TestPromptly(unittest.TestCase):
         form.add('yaks', BooleanInput('Do you like yaks?', default=True))
 
         form.prompt()
-        values = form.values()
+        items = form.values()
 
-        for v in values:
+        for v in items:
             print(v)
