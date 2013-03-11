@@ -31,6 +31,3 @@ class TestPromptly(unittest.TestCase):
 
         for v in values:
             print(v)
-
-        import pdb; pdb.set_trace()
-        foo = 1
