@@ -91,8 +91,10 @@ class BooleanInput(BaseInput):
         False: False, '0': False, 'no': False, 'false': False, 'off': False, 'n': False, 'f': False
         }
 
+        candidate = data.lower() if type(data) == str else data
+
         try:
-            self.value = boolean_states[data.lower()]
+            self.value = boolean_states[candidate]
         except KeyError:
             raise
 
