@@ -26,7 +26,25 @@ class TestPromptly(unittest.TestCase):
 
         form.add('yaks', BooleanInput('Do you like yaks?', default=True))
 
-        form.prompt()
-        items = form.values()
-        print(items)
+    def test_convert_dict(self):
 
+        form = Form()
+
+        form.add('name',
+            StringInput('What is your name?',
+            default='Aubrey'))
+
+        form.add('age',
+            IntegerInput('What is your age?',
+            default=1))
+
+        form.add('color',
+            ChoiceInput('What is your favorite color',
+                zip(range(1,4), ('red', 'green', 'blue')),
+            default=1))
+
+        form.add('yaks', BooleanInput('Do you like yaks?', default=True))
+        form.prompt()
+
+        d = dict(form)
+        print(d)

@@ -18,6 +18,10 @@ class Form(object):
         for prompt in self._fields.itervalues():
             yield prompt.value
 
+    def __iter__(self):
+        for k, v in self._fields.iteritems():
+            yield k, v.value
+
     def __getattr__(self, key):
         try:
             return self._fields[key]
