@@ -28,6 +28,5 @@ class TestPromptly(unittest.TestCase):
 
         form.prompt()
         items = form.values()
+        print(items)
 
-        for v in items:
-            print(v)
