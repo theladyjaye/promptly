@@ -9,7 +9,6 @@ class BaseInput(object):
         self.default = default
         self.validators = validators
         self.value = None
-        self.prefix = prefix
 
     def build_prompt(self):
         prompt = self.label
@@ -31,8 +30,8 @@ class BaseInput(object):
     def validate(self, input):
         return True
 
-    def __call__(self):
-        prompt = '%s%s' % (self.prefix, self.build_prompt())
+    def __call__(self, prefix=None):
+        prompt = '%s%s' % (prefix, self.build_prompt())
 
         while 1:
             data = self.apply_default(raw_input('%s ' % prompt))

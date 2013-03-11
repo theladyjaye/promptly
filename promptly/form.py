@@ -4,17 +4,15 @@ from collections import OrderedDict
 
 class Form(object):
 
-    def __init__(self, prefix=None):
+    def __init__(self):
         self._fields = OrderedDict()
-        self.prefix = prefix
 
     def add(self, key, obj):
-        obj.prefix = self.prefix
         self._fields[key] = obj
 
-    def run(self):
+    def run(self, prefix=None):
         for prompt in self._fields.itervalues():
-            prompt()
+            prompt(prefix=prefix)
 
     def __iter__(self):
         for k, v in self._fields.iteritems():

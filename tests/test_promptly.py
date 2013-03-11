@@ -28,7 +28,7 @@ class TestPromptly(unittest.TestCase):
 
     def test_convert_dict(self):
 
-        form = Form(prefix='[blitzcloud] ')
+        form = Form()
 
         form.add('name',
             StringInput('What is your name?',
@@ -44,7 +44,7 @@ class TestPromptly(unittest.TestCase):
             default=1))
 
         form.add('yaks', BooleanInput('Do you like yaks?', default=True))
-        form.run()
+        form.run(prefix='[promptly] ')
 
         d = dict(form)
         print(d)
