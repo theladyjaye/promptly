@@ -120,11 +120,12 @@ class ChoiceInput(BaseInput):
         return prompt
 
     def process_data(self, data):
+        result = [x for x in self.choices if str(x[0]) == data]
 
-        if not [x for x in choices if str(x[0]) == data]:
+        if not result:
             raise ValueError
 
-        self.value = data
+        self.value = result[0]
 
 
 
