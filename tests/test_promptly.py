@@ -28,7 +28,7 @@ class TestPromptly(unittest.TestCase):
 
     def test_convert_dict(self):
 
-        form = Form()
+        form = Form(prefix='[blitzcloud] ')
 
         form.add('name',
             StringInput('What is your name?',

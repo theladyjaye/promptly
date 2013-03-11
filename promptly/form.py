@@ -4,10 +4,12 @@ from collections import OrderedDict
 
 class Form(object):
 
-    def __init__(self):
+    def __init__(self, prefix=None):
         self._fields = OrderedDict()
+        self.prefix = prefix
 
     def add(self, key, obj):
+        obj.prefix = self.prefix
         self._fields[key] = obj
 
     def prompt(self):

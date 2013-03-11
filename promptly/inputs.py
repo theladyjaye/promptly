@@ -4,11 +4,12 @@ import sys
 
 class BaseInput(object):
 
-    def __init__(self, label, validators=None, default=None):
+    def __init__(self, label, validators=None, default=None, prefix=None):
         self.label = label
         self.default = default
         self.validators = validators
         self.value = None
+        self.prefix = prefix
 
     def build_prompt(self):
         prompt = self.label
@@ -31,7 +32,7 @@ class BaseInput(object):
         return True
 
     def __call__(self):
-        prompt = self.build_prompt()
+        prompt = '%s%s' % (self.prefix, self.build_prompt())
 
         while 1:
             data = self.apply_default(raw_input('%s ' % prompt))
