@@ -19,8 +19,6 @@ class CSSParser(object):
         context = sheet
         property_name = None
 
-        import pdb; pdb.set_trace()
-
         for token, value in self.tokenize(value):
             if token == CSSTokens.SELECTOR:
                 data = value.strip()
@@ -49,7 +47,6 @@ class CSSParser(object):
 
                 context = sheet
 
-        import pdb; pdb.set_trace()
         return sheet
 
     def tokenize(self, value):
