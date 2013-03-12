@@ -1,0 +1,21 @@
+.prompt {
+    color:green;
+    background-color:blue;
+    font-weight:normal;
+}
+
+
+.choices .selected{
+    color:red;
+    background-color:blue;
+}
+
+
+.choices{
+    color:blue;
+    font-weight:bold;
+}
+
+.carousel .container .test{
+    color:green;
+}

@@ -1,10 +1,11 @@
+import os
 import unittest
 from promptly import Form
 from promptly import StringInput
 from promptly import IntegerInput
 from promptly import ChoiceInput
 from promptly import BooleanInput
-
+from promptly.styles import CSSParser
 
 class TestPromptly(unittest.TestCase):
 
@@ -48,3 +49,13 @@ class TestPromptly(unittest.TestCase):
 
         d = dict(form)
         print(d)
+
+    def test_css_parser(self):
+        css = None
+        filename = os.path.abspath('./tests/resources/stylesheet.css')
+
+        with open(filename) as f:
+            css = f.read()
+
+        data = CSSParser.parse_string(css)
+        import pdb; pdb.set_trace()
