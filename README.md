@@ -85,7 +85,7 @@ The font-weight property maps to colorama Style values in the following way:
 
 ### Heads Up
 
-The CSS parser in promptly is VERY VERY primitive. It's just enough to parse
+The CSS parser in promptly is **VERY VERY** primitive. It's just enough to parse
 what is below and that's all. It is by no means a full implementation of the
 CSS spec.
 
