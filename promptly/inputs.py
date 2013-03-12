@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
+from .styles import Style
 
 
 class BaseInput(object):
@@ -10,7 +11,25 @@ class BaseInput(object):
         self.validators = validators
         self.value = None
 
-    def build_prompt(self):
+    def styles_for_key(self, key, stylesheet):
+        styles = {}
+        context = stylesheet
+        try:
+            styles.update(context['selectors']['body']['value'])
+        except KeyError:
+            pass
+
+        for part in key.split('.'):
+            try:
+                context = context['selectors'][part]
+                styles.update(context['value'])
+
+            except KeyError:
+                break
+
+        return Style(styles)
+
+    def build_prompt(self, stylesheet=None):
         prompt = self.label
 
         if self.default:
@@ -30,8 +49,10 @@ class BaseInput(object):
     def validate(self, input):
         return True
 
-    def __call__(self, prefix=None):
-        prompt = '%s%s' % (prefix, self.build_prompt())
+    def __call__(self, prefix=None, stylesheet=None):
+        prompt = '%s' % (self.build_prompt(
+            prefix=prefix,
+            stylesheet=stylesheet))
 
         while 1:
             data = self.apply_default(raw_input('%s ' % prompt))
@@ -49,13 +70,46 @@ class BaseInput(object):
 
 
 class StringInput(BaseInput):
-    pass
+
+    def build_prompt(self, prefix, stylesheet):
+        styles_prefix = self.styles_for_key('prefix', stylesheet)
+        styles_label = self.styles_for_key('string.label', stylesheet)
+        styles_default_wrapper = self.styles_for_key('string.default_wrapper', stylesheet)
+        styles_default_value = self.styles_for_key('string.default_value', stylesheet)
+
+        if self.default:
+            return '%s%s %s%s%s' % (
+                styles_prefix(prefix),
+                styles_label(self.label),
+                styles_default_wrapper('['),
+                styles_default_value(self.default),
+                styles_default_wrapper(']'))
+
+        return '%s%s' % (styles_prefix(prefix),
+                         styles_label(self.label))
 
 
 class IntegerInput(BaseInput):
 
     def __init__(self, label, validators=None, **kwargs):
         super(IntegerInput, self).__init__(label, validators, **kwargs)
+
+    def build_prompt(self, prefix, stylesheet):
+        styles_prefix = self.styles_for_key('prefix', stylesheet)
+        styles_label = self.styles_for_key('integer.label', stylesheet)
+        styles_default_wrapper = self.styles_for_key('integer.default_wrapper', stylesheet)
+        styles_default_value = self.styles_for_key('integer.default_value', stylesheet)
+
+        if self.default:
+            return '%s%s %s%s%s' % (
+                styles_prefix(prefix),
+                styles_label(self.label),
+                styles_default_wrapper('['),
+                styles_default_value(self.default),
+                styles_default_wrapper(']'))
+
+        return '%s%s' % (styles_prefix(prefix),
+                         styles_label(self.label))
 
     def process_data(self, data):
         try:
@@ -69,13 +123,34 @@ class BooleanInput(BaseInput):
     def __init__(self, label, default=True, **kwargs):
         super(BooleanInput, self).__init__(label, default=default, **kwargs)
 
-    def build_prompt(self):
-        prompt = self.label
+    def build_prompt(self, prefix, stylesheet):
+        styles_prefix = self.styles_for_key('prefix', stylesheet)
+        styles_label = self.styles_for_key('boolean.label', stylesheet)
+        styles_default_wrapper = self.styles_for_key('boolean.default_wrapper', stylesheet)
+        styles_default_value = self.styles_for_key('boolean.default_value', stylesheet)
+        styles_other_value = self.styles_for_key('boolean.other_value', stylesheet)
+        styles_seperator = self.styles_for_key('boolean.seperator', stylesheet)
+
+        prompt = styles_label(self.label)
 
         if self.default:
-            prompt = '%s [Y/n]' % (prompt)
+            prompt = '%s%s %s%s%s%s%s' % (
+                styles_prefix(prefix),
+                prompt,
+                styles_default_wrapper('['),
+                styles_default_value('Y'),
+                styles_seperator('/'),
+                styles_other_value('n'),
+                styles_default_wrapper(']'))
         else:
-            prompt = '%s [y/N]' % (prompt)
+            prompt = '%s%s %s%s%s%s%s' % (
+                styles_prefix(prefix),
+                prompt,
+                styles_default_wrapper('['),
+                styles_other_value('y'),
+                styles_seperator('/'),
+                styles_default_value('N'),
+                styles_default_wrapper(']'))
 
         return prompt
 
@@ -105,17 +180,36 @@ class ChoiceInput(BaseInput):
         super(ChoiceInput, self).__init__(label, **kwargs)
         self.choices = choices
 
-    def build_prompt(self):
-        prompt = '%s\n' % self.label
+    def build_prompt(self, prefix, stylesheet):
+        styles_prefix = self.styles_for_key('prefix', stylesheet)
+        styles_label = self.styles_for_key('choices.label', stylesheet)
+        styles_default_wrapper = self.styles_for_key('choices.default_wrapper', stylesheet)
+        styles_default_value = self.styles_for_key('choices.default_value', stylesheet)
+        styles_option_key = self.styles_for_key('choices.option_key', stylesheet)
+        styles_option_value = self.styles_for_key('choices.option_value', stylesheet)
+        styles_seperator = self.styles_for_key('choices.seperator', stylesheet)
+        styles_action = self.styles_for_key('choices.action', stylesheet)
+
+        prompt = '%s\n' % styles_label(self.label)
 
         choices = []
         for key, value in self.choices:
-            choices.append('%s) %s' % (key, value))
+            choices.append('%s%s %s' % (
+                styles_option_key(key),
+                styles_seperator(')'),
+                styles_option_value(value)))
 
-        prompt = '%s%s\nSelect Option' % (prompt, '\n'.join(choices))
+        prompt = '%s%s\n%s%s' % (
+            prompt,
+            '\n'.join(choices),
+            styles_prefix(prefix),
+            styles_action('Select Option'))
 
         if self.default:
-            prompt = '%s [%s]' % (prompt, self.default)
+            prompt = '%s %s%s%s' % (prompt,
+                styles_default_wrapper('['),
+                styles_default_value(self.default),
+                styles_default_wrapper(']'))
 
         return prompt
 

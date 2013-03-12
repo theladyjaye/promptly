@@ -1,0 +1,87 @@
+body{
+    color:white;
+    font-weight:normal;
+}
+
+.prompt{
+    color:red;
+}
+
+.prefix{
+    color:blue;
+    font-weight:lighter;
+}
+
+.string .label{
+    color:magenta;
+}
+
+.string .default-wrapper{
+    color:white;
+}
+
+.string .default-value{
+    color:yellow;
+}
+
+.integer .label{
+    color:magenta;
+}
+
+.integer .default-wrapper{
+    color:white;
+}
+
+.integer .default-value{
+    color:yellow;
+}
+
+.boolean .label{
+    color:magenta;
+}
+
+.boolean .default-wrapper{
+    color:white;
+}
+
+.boolean .default-value{
+    color:yellow;
+}
+
+.boolean .other-value{
+    color:yellow;
+}
+
+.boolean .seperator{
+    color:white;
+}
+
+.choices .label{
+    color:magenta;
+}
+
+.choices .default-wrapper{
+    color:white;
+}
+
+.choices .default-value{
+    color:yellow;
+}
+
+.choices .option-key{
+    color:yellow;
+}
+
+.choices .seperator{
+    color:yellow;
+    font-weight:lighter;
+}
+
+.choices .option-value{
+    color:white;
+}
+
+.choices .action{
+    color:magenta;
+
+}

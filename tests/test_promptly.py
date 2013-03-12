@@ -58,4 +58,3 @@ class TestPromptly(unittest.TestCase):
             css = f.read()
 
         data = CSSParser.parse_string(css)
-        import pdb; pdb.set_trace()
