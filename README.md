@@ -62,7 +62,6 @@ Only the following properties apply:
 The avialable colors are limited to the color names provided by colorama:
 
 ```
-
     Fore: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
     Back: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
     Style: DIM, NORMAL, BRIGHT, RESET_ALL
