@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import signal
+import sys
+
 import pkg_resources
 from collections import OrderedDict
 from .styles import CSSParser
@@ -46,6 +49,7 @@ class Form(object):
 
     def __init__(self):
         self._fields = OrderedDict()
+        signal.signal(signal.SIGINT, self._on_sigint)
 
     def _add(self, key, obj):
         self._fields[key] = obj
@@ -75,3 +79,8 @@ class Form(object):
             return self._fields[key]
         except KeyError:
             raise AttributeError
+
+    # signal handlers
+    def _on_sigint(self, signal, frame):
+        print " You Quit! You're a quitter! Boo!"
+        sys.exit(0)
