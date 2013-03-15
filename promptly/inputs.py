@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
+from .compat import input
 from .styles import Style
 
 
@@ -55,7 +56,7 @@ class BaseInput(object):
             stylesheet=stylesheet))
 
         while 1:
-            data = self.apply_default(raw_input('%s ' % prompt))
+            data = self.apply_default(input('%s ' % prompt))
 
             try:
                 self.process_data(data)
