@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import signal
 import sys
-
 import pkg_resources
-from collections import OrderedDict
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
 from .styles import CSSParser
-
 from .inputs import StringInput
 from .inputs import IntegerInput
 from .inputs import ChoiceInput
