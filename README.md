@@ -1,4 +1,7 @@
 # Promptly
+
+[![Build Status](https://travis-ci.org/aventurella/promptly.png?branch=master)](https://travis-ci.org/aventurella/promptly)
+
 A little python utility to help you build command line prompts that can
 be styled using CSS.
 
