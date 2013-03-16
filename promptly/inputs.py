@@ -15,6 +15,7 @@ class BaseInput(object):
     def styles_for_key(self, key, stylesheet):
         styles = {}
         context = stylesheet
+
         try:
             styles.update(context['selectors']['body']['value'])
         except KeyError:
