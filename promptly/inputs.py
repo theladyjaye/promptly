@@ -180,7 +180,7 @@ class ChoiceInput(BaseInput):
 
     def __init__(self, label, choices, **kwargs):
         super(ChoiceInput, self).__init__(label, **kwargs)
-        self.choices = choices
+        self.choices = list(choices)
 
     def build_prompt(self, prefix, stylesheet):
         styles_prefix = self.styles_for_key('prefix', stylesheet)
@@ -216,7 +216,6 @@ class ChoiceInput(BaseInput):
         return prompt
 
     def process_data(self, data):
-
         result = [x for x in self.choices if str(x[0]) == str(data)]
 
         if not result:

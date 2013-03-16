@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import signal
 import sys
+import signal
 import pkg_resources
 try:
     from collections import OrderedDict
@@ -11,6 +11,7 @@ from .inputs import StringInput
 from .inputs import IntegerInput
 from .inputs import ChoiceInput
 from .inputs import BooleanInput
+from .compat import iteritems, itervalues
 
 
 class AddAction(object):
@@ -43,6 +44,7 @@ class AddAction(object):
 
 
 class Form(object):
+
     @property
     def add(self):
         action = AddAction(self)
@@ -68,11 +70,11 @@ class Form(object):
 
             styles = CSSParser.parse_string(stream.read())
 
-        for prompt in self._fields.itervalues():
+        for prompt in itervalues(self._fields):
             prompt(prefix=prefix, stylesheet=styles)
 
     def __iter__(self):
-        for k, v in self._fields.iteritems():
+        for k, v in iteritems(self._fields):
             yield k, v.value
 
     def __getattr__(self, key):
@@ -83,5 +85,5 @@ class Form(object):
 
     # signal handlers
     def _on_sigint(self, signal, frame):
-        print " You Quit! You're a quitter! Boo!"
+        print ('You Quit! You\'re a quitter! Boo!')
         sys.exit(0)

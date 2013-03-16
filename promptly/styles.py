@@ -130,7 +130,7 @@ class CSSParser(object):
                 yield CSSTokens.PROPERTY_VALUE, buf
                 buf = ''
             else:
-                buf = buf + char
+                buf = buf + str(char)
 
 
 
