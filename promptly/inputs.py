@@ -2,6 +2,7 @@
 import sys
 from .compat import input, iteritems
 from .styles import Style
+from .utils import numeric_options
 
 
 class Branch(object):
@@ -11,7 +12,12 @@ class Branch(object):
         self.kwargs = kwargs
 
     def __call__(self, form, prefix=None, stylesheet=None):
-        self.handler(form, *self.args, **self.kwargs)
+        branch = self.handler(form, *self.args, **self.kwargs)
+        index = form._fields.index((id(self), self)) + 1
+
+        for each in iter(branch._fields):
+            form._fields.insert(index, each)
+            index = index + 1
 
 
 class BaseInput(object):
@@ -188,9 +194,9 @@ class BooleanInput(BaseInput):
 
 class ChoiceInput(BaseInput):
 
-    def __init__(self, label, choices, **kwargs):
+    def __init__(self, label, choices, option_format=numeric_options, **kwargs):
         super(ChoiceInput, self).__init__(label, **kwargs)
-        self.choices = list(choices)
+        self.choices = option_format(choices)
 
     def build_prompt(self, prefix, stylesheet):
         styles_prefix = self.styles_for_key('prefix', stylesheet)
@@ -232,3 +238,94 @@ class ChoiceInput(BaseInput):
             raise ValueError
 
         self.value = result[0]
+
+
+class MultiSelectInput(ChoiceInput):
+
+    def __init__(self, label, choices, option_format=numeric_options, done_label='Done', **kwargs):
+        options = list(sorted(choices))
+        options += (done_label, )
+        super(MultiSelectInput, self).__init__(label, options, option_format, **kwargs)
+        self.value = set()
+
+    def build_prompt(self, prefix, stylesheet):
+        styles_prefix = self.styles_for_key('prefix', stylesheet)
+        styles_label = self.styles_for_key('choices.label', stylesheet)
+        styles_default_wrapper = self.styles_for_key('choices.default_wrapper', stylesheet)
+        styles_default_value = self.styles_for_key('choices.default_value', stylesheet)
+        styles_option_key = self.styles_for_key('choices.option_key', stylesheet)
+        styles_option_value = self.styles_for_key('choices.option_value', stylesheet)
+        styles_seperator = self.styles_for_key('choices.seperator', stylesheet)
+        styles_action = self.styles_for_key('choices.action', stylesheet)
+
+        prompt = '%s\n' % styles_label(self.label)
+
+        choices = []
+        choices_count = len(self.choices)
+
+        for i, each in enumerate(self.choices):
+            key, value = each
+            prefix = '[ ] '
+
+            if i == (choices_count - 1):
+                prefix = ''
+            elif each in self.value:
+                prefix = '[x] '
+
+            choices.append('%s%s %s' % (
+                styles_option_key(key),
+                styles_seperator(')'),
+                styles_option_value('%s%s' % (prefix, value))))
+
+        prompt = '%s%s\n%s%s' % (
+            prompt,
+            '\n'.join(choices),
+            styles_prefix(prefix),
+            styles_action('Select Options'))
+
+        if self.default:
+            prompt = '%s %s%s%s' % (prompt,
+                styles_default_wrapper('['),
+                styles_default_value(self.default),
+                styles_default_wrapper(']'))
+
+        return prompt
+
+    def __call__(self, form, prefix=None, stylesheet=None):
+
+        choices_count = len(self.choices)
+
+        while 1:
+            prompt = '%s' % (self.build_prompt(
+                prefix=prefix,
+                stylesheet=stylesheet))
+
+            data = self.apply_default(input('%s ' % prompt))
+
+            try:
+                obj = next(x for x in self.choices if str(x[0]) == str(data))
+            except StopIteration:
+                continue
+
+            if self.choices.index(obj) == (choices_count - 1):
+                self.value = list(self.value)
+                break
+
+            if obj in self.value:
+                self.value = self.value - frozenset([obj])
+                continue
+
+            try:
+                self.process_data(data)
+            except:
+                continue
+
+    def process_data(self, data):
+        result = [x for x in self.choices if str(x[0]) == str(data)]
+
+        if not result:
+            raise ValueError
+
+        self.value.add(result[0])
+
+
