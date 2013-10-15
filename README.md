@@ -13,7 +13,16 @@ be styled using CSS.
     from promptly import IntegerInput
     from promptly import ChoiceInput
     from promptly import BooleanInput
+    from promptly import Branch
 
+    def branch_example(form, foo):
+        if form.age.value < 12:
+            form.add('food',
+            StringInput('What is your favorite food?',
+            default=foo)
+
+
+    # Build our form
     form = Form()
 
     # add questions in the sequence you would like them to appear
@@ -25,6 +34,8 @@ be styled using CSS.
     form.add('age',
         IntegerInput('What is your age?',
         default=1))
+
+    form.add(Branch(branch_example, foo='Pizza'))
 
     form.add('color',
         ChoiceInput('What is your favorite color',
@@ -47,6 +58,9 @@ be styled using CSS.
     print(form.age.value)
     print(form.color.value)  # this will be a (key, value) tuple
     print(form.yaks.value)
+
+    if form.age.value < 12:
+        print(form.food.value)
 
     # Or we can just convert the whole form into a dictionary:
     d = dict(form)

@@ -15,7 +15,7 @@ requires = ['colorama']
 
 setup(
     name='promptly',
-    version='0.3',
+    version='0.4',
     description='Console Prompting',
     long_description=readme,
     author='Aubrey Taylor <aubricus@gmail.com>, Adam Venturella <aventurella@gmail.com>',
