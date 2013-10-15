@@ -11,7 +11,7 @@ from .inputs import StringInput
 from .inputs import IntegerInput
 from .inputs import ChoiceInput
 from .inputs import BooleanInput
-from .inputs import Fork
+from .inputs import Branch
 from .compat import iteritems, itervalues
 
 
@@ -43,8 +43,8 @@ class AddAction(object):
         self.form._add(key, obj)
         return self.form
 
-    def fork(self, key, handler, *args, **kwargs):
-        obj = Fork(key, handler, *args, **kwargs)
+    def branch(self, handler, *args, **kwargs):
+        obj = Branch(handler, *args, **kwargs)
         self.form._add(None, obj)
         return self.form
 

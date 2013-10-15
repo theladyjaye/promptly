@@ -4,19 +4,14 @@ from .compat import input, iteritems
 from .styles import Style
 
 
-class Fork(object):
-    def __init__(self, key, handler, *args, **kwargs):
-        self.key = key
+class Branch(object):
+    def __init__(self, handler, *args, **kwargs):
         self.handler = handler
         self.args = args
         self.kwargs = kwargs
 
     def __call__(self, form, prefix=None, stylesheet=None):
-        value = getattr(form, self.key).value
-        fork = self.handler(value, *self.args, **self.kwargs)
-
-        for k, v in iteritems(fork._fields):
-            form._add(k, v)
+        self.handler(form, *self.args, **self.kwargs)
 
 
 class BaseInput(object):
