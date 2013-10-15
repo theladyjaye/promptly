@@ -1,7 +1,22 @@
 # -*- coding: utf-8 -*-
 import sys
-from .compat import input
+from .compat import input, iteritems
 from .styles import Style
+
+
+class Fork(object):
+    def __init__(self, key, handler, *args, **kwargs):
+        self.key = key
+        self.handler = handler
+        self.args = args
+        self.kwargs = kwargs
+
+    def __call__(self, form, prefix=None, stylesheet=None):
+        value = getattr(form, self.key).value
+        fork = self.handler(value, *self.args, **self.kwargs)
+
+        for k, v in iteritems(fork._fields):
+            form._add(k, v)
 
 
 class BaseInput(object):
@@ -51,7 +66,7 @@ class BaseInput(object):
     def validate(self, input):
         return True
 
-    def __call__(self, prefix=None, stylesheet=None):
+    def __call__(self, form, prefix=None, stylesheet=None):
         prompt = '%s' % (self.build_prompt(
             prefix=prefix,
             stylesheet=stylesheet))

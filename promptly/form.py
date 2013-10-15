@@ -11,6 +11,7 @@ from .inputs import StringInput
 from .inputs import IntegerInput
 from .inputs import ChoiceInput
 from .inputs import BooleanInput
+from .inputs import Fork
 from .compat import iteritems, itervalues
 
 
@@ -42,6 +43,11 @@ class AddAction(object):
         self.form._add(key, obj)
         return self.form
 
+    def fork(self, key, handler, *args, **kwargs):
+        obj = Fork(key, handler, *args, **kwargs)
+        self.form._add(None, obj)
+        return self.form
+
 
 class Form(object):
 
@@ -71,7 +77,7 @@ class Form(object):
             styles = CSSParser.parse_string(stream.read())
 
         for prompt in itervalues(self._fields):
-            prompt(prefix=prefix, stylesheet=styles)
+            prompt(form=self, prefix=prefix, stylesheet=styles)
 
     def __iter__(self):
         for k, v in iteritems(self._fields):
