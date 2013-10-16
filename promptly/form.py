@@ -35,8 +35,8 @@ class AddAction(object):
         self.form._add(key, obj)
         return self.form
 
-    def multiselect(self, key, label, choices, option_format=numeric_options, **kwargs):
-        obj = MultiSelectInput(label, choices, option_format, **kwargs)
+    def multiselect(self, key, label, choices, done_label='Done', option_format=numeric_options, **kwargs):
+        obj = MultiSelectInput(label, choices, done_label, option_format, **kwargs)
         self.form._add(key, obj)
         return self.form
 

@@ -7,6 +7,77 @@ be styled using CSS.
 
 ## WARNING 0.4 is backwards incompatible
 
+**Migration Guide**
+    - `my_form.add.choice` should be become `my_form.add.select`
+    - `ChoiceInput` should become `SelectInput`
+    - SelectInput (formerly ChoiceInput) and MultiSelectInput now take
+      an option_format callable. By default this callable is
+      `promptly.utils.numeric_options`. This will take a list ['foo', 'bar']
+      and return a list: [(1, 'foo'), (2, 'bar')]. So if you only need
+      numbers for your choices or multi-select input's you don't
+      need to worry about, you get them for free. If you were passing
+      your own in something like: `zip(range(1,3), ['foo', 'bar'])` you
+      no longer need to do that. In fact that will break things for you
+      so you should replace it with just your list of choices
+
+
+
+### New Features
+
+#### Branches
+Forms can now branch. The branch input item takes a callable that will
+be executed and is expected to return another `Form` object. This `Form`
+object will be merged into the currently running form at the location
+where the branch was added. The callable signature is as follows:
+
+`my_branch_building_action(form, *args, **kwargs):`
+
+Example branch usage:
+
+```python
+
+def handler(form, name):
+    branch = Form()
+
+    if form.age.value < 30:
+        branch.add.string('name', 'What is your name?')
+    else:
+        branch.add.string('name', 'What is your pet's name?', default=name)
+
+    return branch
+
+
+form = Form()
+form.add.int('age', 'What is your age?', default=age)
+form.add.branch(handler, name='Lucy')
+
+# The branch fields will be added here in terms of
+# position in the form once the user reaches the branch
+
+form.add.int('number', 'What is your favorite number?')
+form.run()
+```
+
+#### MultiSelectInput
+A new input type has been added, `MultiSelectInput`, a shortcut for creating
+one is also available in the form of:
+`my_form.add.multiselect(key, label, choices, done_label='Done')`
+
+Note that done_label is optional.
+
+MultiSelectInput lets the user choose multiple options from a SelectInput
+style display. It marks the currently selected items. If the user chooses the
+same option that has already been selected it will be deselected.
+
+A final option is added to the list of choices provided to represent
+the sentinel choice. The `done_label` kwarg sets the value used here
+By default it is set to *Done*. The user must select the sentinel choice
+in order to continue on in the form.
+
+
+
+
+
 ## Lets Make a Promptly Form
 
 ```python
@@ -16,12 +87,6 @@ be styled using CSS.
     from promptly import ChoiceInput
     from promptly import BooleanInput
     from promptly import Branch
-
-    def branch_example(form, foo):
-        if form.age.value < 12:
-            form.add('food',
-            StringInput('What is your favorite food?',
-            default=foo)
 
 
     # Build our form
@@ -36,8 +101,6 @@ be styled using CSS.
     form.add('age',
         IntegerInput('What is your age?',
         default=1))
-
-    form.add(Branch(branch_example, foo='Pizza'))
 
     # no options_format kwarg is provided for ChoiceInput
     # so it will use the default numeric_options

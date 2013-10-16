@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
-from .compat import input, iteritems
+from .compat import input
 from .styles import Style
 from .utils import numeric_options
 
@@ -13,6 +13,10 @@ class Branch(object):
 
     def __call__(self, form, prefix=None, stylesheet=None):
         branch = self.handler(form, *self.args, **self.kwargs)
+
+        if not branch:
+            return
+
         index = form._fields.index((id(self), self)) + 1
 
         for each in iter(branch._fields):
@@ -242,8 +246,8 @@ class SelectInput(BaseInput):
 
 class MultiSelectInput(SelectInput):
 
-    def __init__(self, label, choices, option_format=numeric_options, done_label='Done', **kwargs):
-        options = list(sorted(choices))
+    def __init__(self, label, choices, done_label='Done', option_format=numeric_options, **kwargs):
+        options = list(choices)
         options += (done_label, )
         super(MultiSelectInput, self).__init__(label, options, option_format, **kwargs)
         self.value = set()

@@ -439,4 +439,35 @@ class TestPromptly(unittest.TestCase):
         self.assertTrue(data['age'] == 99)
 
     def test_multiselect_select(self):
-        pass
+        # choices get ABC sorted though numeric options_format
+        # which is the default
+        choices = ('chocolate', 'vanilla', 'apple')
+
+        # multiselect adds a final option to
+        # the list of choices to signify "done"
+        # the default "done" id under the standard numeric
+        # options format is len(choices) + 1, in this case
+        # we have 3 choices above, so the "done" option
+        # is 3 + 1 -> 4
+        returns = ['1', '3', '4']
+
+        def side_effect(*args):
+            result = returns.pop(0)
+            return result
+
+        input = Mock(side_effect=side_effect)
+        inputs.input = input
+
+        form = Form()
+        form.add.multiselect(
+            'flavors',
+            'Select your favorite flavors',
+            choices)
+        form.run()
+
+        self.assertTrue(input.call_count == 3)
+        data = dict(form)
+
+        self.assertTrue(len(form.flavors.value) == 2)
+        self.assertTrue(data['flavors'][0] == (1, 'apple'))
+        self.assertTrue(data['flavors'][1] == (3, 'vanilla'))
