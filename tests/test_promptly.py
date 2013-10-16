@@ -6,10 +6,25 @@ from promptly import inputs
 # TODO before 0.4 release
 # add tests for branch
 # add tests for multiselect
-# add tests for form length
 
 
 class TestPromptly(unittest.TestCase):
+
+    def test_form_len(self):
+        form = Form()
+
+        form.add.string(
+            'name',
+            'What is your name?',
+            default='Aubrey'
+        )
+
+        form.add.int(
+            'name',
+            'What is your age?'
+        )
+
+        self.assertTrue(len(form) == 2)
 
     def test_prompt_string(self):
         returns = ['lucy']
@@ -394,3 +409,32 @@ class TestPromptly(unittest.TestCase):
         self.assertTrue(data['yaks'] == True)
         self.assertTrue(data['color'][0] == 3)
         self.assertTrue(data['color'][1] == 'blue')
+
+    def test_branch(self):
+        returns = ['99', 'lucy']
+
+        def side_effect(*args):
+            result = returns.pop(0)
+            return result
+
+        def branch(form, age, name):
+            f = Form()
+            f.add.int('age', 'What is your age?', default=age)
+            f.add.string('name', 'What is your name?', default=name)
+            self.assertTrue(name == 'clark')
+            self.assertTrue(age == 1)
+            return f
+
+        input = Mock(side_effect=side_effect)
+        inputs.input = input
+
+        form = Form()
+        form.add.branch(branch, 1, name='clark')
+        form.run()
+
+        self.assertTrue(input.call_count == 2)
+        data = dict(form)
+
+        self.assertTrue(len(form) == 3)
+        self.assertTrue(data['name'] == 'lucy')
+        self.assertTrue(data['age'] == 99)
