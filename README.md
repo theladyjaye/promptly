@@ -37,9 +37,11 @@ be styled using CSS.
 
     form.add(Branch(branch_example, foo='Pizza'))
 
+    # no options_format kwarg is provided for ChoiceInput
+    # so it will use the default numeric_options
     form.add('color',
         ChoiceInput('What is your favorite color',
-            zip(range(1,4), ('red', 'green', 'blue')),
+            ('red', 'green', 'blue'),
         default=1))
 
     form.add('yaks', BooleanInput('Do you like yaks?', default=True))
