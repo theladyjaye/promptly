@@ -441,7 +441,7 @@ class TestPromptly(unittest.TestCase):
     def test_multiselect_select(self):
         # choices get ABC sorted though numeric options_format
         # which is the default
-        choices = ('chocolate', 'vanilla', 'apple')
+        choices = sorted(('chocolate', 'vanilla', 'apple'))
 
         # multiselect adds a final option to
         # the list of choices to signify "done"
