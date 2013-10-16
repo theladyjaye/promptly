@@ -5,6 +5,8 @@
 A little python utility to help you build command line prompts that can
 be styled using CSS.
 
+## WARNING 0.4 is backwards incompatible
+
 ## Lets Make a Promptly Form
 
 ```python
