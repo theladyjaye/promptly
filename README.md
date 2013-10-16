@@ -84,7 +84,7 @@ in order to continue on in the form.
     from promptly import Form
     from promptly import StringInput
     from promptly import IntegerInput
-    from promptly import ChoiceInput
+    from promptly import SelectInput
     from promptly import BooleanInput
     from promptly import Branch
 
@@ -105,7 +105,7 @@ in order to continue on in the form.
     # no options_format kwarg is provided for ChoiceInput
     # so it will use the default numeric_options
     form.add('color',
-        ChoiceInput('What is your favorite color',
+        SelectInput('What is your favorite color',
             ('red', 'green', 'blue'),
         default=1))
 
@@ -134,6 +134,59 @@ in order to continue on in the form.
     print(d)
 
 ```
+
+## Making the same form as above, using sortcuts
+
+```python
+    from promptly import Form
+
+
+    # Build our form
+    form = Form()
+
+    # add questions in the sequence you would like them to appear
+
+    form.add.string('name',
+        'What is your name?',
+        default='Aubrey')
+
+    form.add.int('age',
+        'What is your age?',
+        default=1)
+
+    # no options_format kwarg is provided for ChoiceInput
+    # so it will use the default numeric_options
+    form.add.select('color',
+        'What is your favorite color',
+        ('red', 'green', 'blue'),
+        default=1)
+
+    form.add.bool('yaks', 'Do you like yaks?', default=True)
+
+    # Our form is created, lets prompt the user for the answers:
+
+    # promptly comes with a default set of styles or you can
+    # provide your own.
+
+    with open('/path/to/my/styles.css') as css:
+        form.run(prefix='[promptly] ', stylesheet=css.read())
+
+    # control has returned back to our script, lets see what the user said:
+
+    print(form.name.value)
+    print(form.age.value)
+    print(form.color.value)  # this will be a (key, value) tuple
+    print(form.yaks.value)
+
+    if form.age.value < 12:
+        print(form.food.value)
+
+    # Or we can just convert the whole form into a dictionary:
+    d = dict(form)
+    print(d)
+
+```
+
 
 ## CSS Styling
 Promptly prompts are styles with a very limited subset of CSS.
