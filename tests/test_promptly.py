@@ -121,7 +121,7 @@ class TestPromptly(unittest.TestCase):
         form.add.choice(
             'color',
             'What is your favorite color?',
-            zip(range(1, 4), ('red', 'green', 'blue')),
+            ('red', 'green', 'blue'),
             default=2
         )
 
@@ -148,7 +148,7 @@ class TestPromptly(unittest.TestCase):
         form.add.choice(
             'color',
             'What is your favorite color?',
-            zip(range(1, 4), ('red', 'green', 'blue')),
+            ('red', 'green', 'blue'),
             default=2
         )
 
@@ -333,7 +333,7 @@ class TestPromptly(unittest.TestCase):
         ).add.choice(
             'color',
             'What is your favorite color?',
-            zip(range(1, 4), ('red', 'green', 'blue')),
+            ('red', 'green', 'blue'),
             default=2
         )
 
@@ -375,7 +375,7 @@ class TestPromptly(unittest.TestCase):
         ).add.choice(
             'color',
             'What is your favorite color?',
-            zip(range(1, 4), ('red', 'green', 'blue')),
+            ('red', 'green', 'blue'),
             default=2
         )
 
