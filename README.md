@@ -8,17 +8,17 @@ be styled using CSS.
 ## WARNING 0.4 is backwards incompatible
 
 **Migration Guide**
-    - `my_form.add.choice` should be become `my_form.add.select`
-    - `ChoiceInput` should become `SelectInput`
-    - SelectInput (formerly ChoiceInput) and MultiSelectInput now take
-      an option_format callable. By default this callable is
-      `promptly.utils.numeric_options`. This will take a list ['foo', 'bar']
-      and return a list: [(1, 'foo'), (2, 'bar')]. So if you only need
-      numbers for your choices or multi-select input's you don't
-      need to worry about, you get them for free. If you were passing
-      your own in something like: `zip(range(1,3), ['foo', 'bar'])` you
-      no longer need to do that. In fact that will break things for you
-      so you should replace it with just your list of choices
+-   `my_form.add.choice` should be become `my_form.add.select`
+-   `ChoiceInput` should become `SelectInput`
+-   SelectInput (formerly ChoiceInput) and MultiSelectInput now take
+    an option_format callable. By default this callable is
+    `promptly.utils.numeric_options`. This will take a list ['foo', 'bar']
+    and return a list: [(1, 'foo'), (2, 'bar')]. So if you only need
+    numbers for your choices or multi-select input's you don't
+    need to worry about, you get them for free. If you were passing
+    your own in something like: `zip(range(1,3), ['foo', 'bar'])` you
+    no longer need to do that. In fact that will break things for you
+    so you should replace it with just your list of choices
 
 
 
