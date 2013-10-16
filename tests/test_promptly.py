@@ -125,7 +125,7 @@ class TestPromptly(unittest.TestCase):
 
         self.assertTrue(data['age'] == 5)
 
-    def test_prompt_choice(self):
+    def test_prompt_select(self):
         returns = ['1']
 
         def side_effect(*args):
@@ -137,7 +137,7 @@ class TestPromptly(unittest.TestCase):
 
         form = Form()
 
-        form.add.choice(
+        form.add.select(
             'color',
             'What is your favorite color?',
             ('red', 'green', 'blue'),
@@ -152,7 +152,7 @@ class TestPromptly(unittest.TestCase):
         self.assertTrue(data['color'][0] == 1)
         self.assertTrue(data['color'][1] == 'red')
 
-    def test_prompt_choice_default(self):
+    def test_prompt_select_default(self):
         returns = ['']
 
         def side_effect(*args):
@@ -164,7 +164,7 @@ class TestPromptly(unittest.TestCase):
 
         form = Form()
 
-        form.add.choice(
+        form.add.select(
             'color',
             'What is your favorite color?',
             ('red', 'green', 'blue'),
@@ -349,7 +349,7 @@ class TestPromptly(unittest.TestCase):
             'yaks',
             'Do you like yaks?',
             default=True
-        ).add.choice(
+        ).add.select(
             'color',
             'What is your favorite color?',
             ('red', 'green', 'blue'),
@@ -391,7 +391,7 @@ class TestPromptly(unittest.TestCase):
             'yaks',
             'Do you like yaks?',
             default=True
-        ).add.choice(
+        ).add.select(
             'color',
             'What is your favorite color?',
             ('red', 'green', 'blue'),

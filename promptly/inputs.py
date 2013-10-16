@@ -192,10 +192,10 @@ class BooleanInput(BaseInput):
             raise
 
 
-class ChoiceInput(BaseInput):
+class SelectInput(BaseInput):
 
     def __init__(self, label, choices, option_format=numeric_options, **kwargs):
-        super(ChoiceInput, self).__init__(label, **kwargs)
+        super(SelectInput, self).__init__(label, **kwargs)
         self.choices = option_format(choices)
 
     def build_prompt(self, prefix, stylesheet):
@@ -240,7 +240,7 @@ class ChoiceInput(BaseInput):
         self.value = result[0]
 
 
-class MultiSelectInput(ChoiceInput):
+class MultiSelectInput(SelectInput):
 
     def __init__(self, label, choices, option_format=numeric_options, done_label='Done', **kwargs):
         options = list(sorted(choices))

@@ -2,14 +2,10 @@
 import sys
 import signal
 import pkg_resources
-try:
-    from collections import OrderedDict
-except ImportError:
-    from ordereddict import OrderedDict
 from .styles import CSSParser
 from .inputs import StringInput
 from .inputs import IntegerInput
-from .inputs import ChoiceInput
+from .inputs import SelectInput
 from .inputs import BooleanInput
 from .inputs import MultiSelectInput
 from .inputs import Branch
@@ -34,8 +30,8 @@ class AddAction(object):
         self.form._add(key, obj)
         return self.form
 
-    def choice(self, key, label, choices, option_format=numeric_options, **kwargs):
-        obj = ChoiceInput(label, choices, option_format, **kwargs)
+    def select(self, key, label, choices, option_format=numeric_options, **kwargs):
+        obj = SelectInput(label, choices, option_format, **kwargs)
         self.form._add(key, obj)
         return self.form
 
