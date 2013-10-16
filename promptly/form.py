@@ -95,8 +95,6 @@ class Form(object):
             return next(x[1] for x in self._fields if x[0] == key)
         except StopIteration:
             raise AttributeError
-        except KeyError:
-            raise AttributeError
 
     # signal handlers
     def _on_sigint(self, signal, frame):
