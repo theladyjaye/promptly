@@ -3,6 +3,11 @@ from mock import Mock
 from promptly import Form
 from promptly import inputs
 
+# TODO before 0.4 release
+# add tests for branch
+# add tests for multiselect
+# add tests for form length
+
 
 class TestPromptly(unittest.TestCase):
 

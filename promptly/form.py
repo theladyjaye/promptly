@@ -79,9 +79,13 @@ class Form(object):
         for label, input in iter(self._fields):
             input(form=self, prefix=prefix, stylesheet=styles)
 
+    def __len__(self):
+        return len(self._fields)
+
     def __iter__(self):
         for k, v in iter(self._fields):
-            yield k, v.value
+            if not isinstance(v, Branch):
+                yield k, v.value
 
     def __getattr__(self, key):
         try:
