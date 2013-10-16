@@ -11,6 +11,7 @@ from .inputs import StringInput
 from .inputs import IntegerInput
 from .inputs import ChoiceInput
 from .inputs import BooleanInput
+from .inputs import MultiSelectInput
 from .inputs import Branch
 from .utils import numeric_options
 
@@ -35,6 +36,11 @@ class AddAction(object):
 
     def choice(self, key, label, choices, option_format=numeric_options, **kwargs):
         obj = ChoiceInput(label, choices, option_format, **kwargs)
+        self.form._add(key, obj)
+        return self.form
+
+    def multiselect(self, key, label, choices, option_format=numeric_options, **kwargs):
+        obj = MultiSelectInput(label, choices, option_format, **kwargs)
         self.form._add(key, obj)
         return self.form
 

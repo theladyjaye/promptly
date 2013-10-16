@@ -4,7 +4,6 @@ from promptly import Form
 from promptly import inputs
 
 # TODO before 0.4 release
-# add tests for branch
 # add tests for multiselect
 
 
@@ -438,3 +437,6 @@ class TestPromptly(unittest.TestCase):
         self.assertTrue(len(form) == 3)
         self.assertTrue(data['name'] == 'lucy')
         self.assertTrue(data['age'] == 99)
+
+    def test_multiselect_select(self):
+        pass
