@@ -77,7 +77,7 @@ class BaseInput(object):
             stylesheet=stylesheet))
 
         while 1:
-            data = self.apply_default(input('%s ' % prompt))
+            data = self.apply_default(input('\n%s ' % prompt))
 
             try:
                 self.process_data(data)
@@ -304,7 +304,7 @@ class MultiSelectInput(SelectInput):
                 prefix=prefix,
                 stylesheet=stylesheet))
 
-            data = self.apply_default(input('%s ' % prompt))
+            data = self.apply_default(input('\n%s ' % prompt))
 
             try:
                 obj = next(x for x in self.choices if str(x[0]) == str(data))
