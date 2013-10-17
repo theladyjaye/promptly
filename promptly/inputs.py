@@ -261,6 +261,7 @@ class MultiSelectInput(SelectInput):
         styles_option_value = self.styles_for_key('choices.option_value', stylesheet)
         styles_seperator = self.styles_for_key('choices.seperator', stylesheet)
         styles_action = self.styles_for_key('choices.action', stylesheet)
+        styles_selection = self.styles_for_key('choices.selection', stylesheet)
 
         prompt = '%s\n' % styles_label(self.label)
 
@@ -274,7 +275,7 @@ class MultiSelectInput(SelectInput):
             if i == (choices_count - 1):
                 prefix = ''
             elif each in self.value:
-                prefix = '[x] '
+                prefix = '[%s] ' % styles_selection('x')
 
             choices.append('%s%s %s' % (
                 styles_option_key(key),

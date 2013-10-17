@@ -13,11 +13,12 @@ body{
 }
 
 .string .label{
-    color:magenta;
+    color:white;
 }
 
 .string .default-wrapper{
     color:white;
+    font-weight:bold;
 }
 
 .string .default-value{
@@ -25,11 +26,12 @@ body{
 }
 
 .integer .label{
-    color:magenta;
+    color:white;
 }
 
 .integer .default-wrapper{
     color:white;
+    font-weight:bold;
 }
 
 .integer .default-value{
@@ -37,11 +39,12 @@ body{
 }
 
 .boolean .label{
-    color:magenta;
+    color:white;
 }
 
 .boolean .default-wrapper{
     color:white;
+    font-weight:bold;
 }
 
 .boolean .default-value{
@@ -54,14 +57,16 @@ body{
 
 .boolean .seperator{
     color:white;
+    font-weight:bold;
 }
 
 .choices .label{
-    color:magenta;
+    color:white;
 }
 
 .choices .default-wrapper{
     color:white;
+    font-weight:bold;
 }
 
 .choices .default-value{
@@ -79,9 +84,14 @@ body{
 
 .choices .option-value{
     color:white;
+    font-weight:bold;
 }
 
 .choices .action{
     color:magenta;
+    font-weight:bold;
+}
 
+.choices .selection{
+    color:white;
 }

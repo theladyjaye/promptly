@@ -78,6 +78,7 @@ class Form(object):
 
             styles = CSSParser.parse_string(stream.read())
 
+        prefix = '' if prefix is None else prefix
         for label, input in iter(self._fields):
             input(form=self, prefix=prefix, stylesheet=styles)
 
