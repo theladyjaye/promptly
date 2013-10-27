@@ -12,6 +12,12 @@ body{
     font-weight:lighter;
 }
 
+.notification .label{
+    color:white;
+    font-weight:bold;
+}
+
+
 .string .label{
     color:white;
 }

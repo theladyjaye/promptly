@@ -91,6 +91,15 @@ class BaseInput(object):
                 continue
 
 
+class Notification(BaseInput):
+    def build_prompt(self, prefix, stylesheet):
+        styles_prefix = self.styles_for_key('prefix', stylesheet)
+        styles_label = self.styles_for_key('notification.label', stylesheet)
+
+        return '%s%s' % (styles_prefix(prefix),
+                         styles_label(self.label))
+
+
 class StringInput(BaseInput):
 
     def build_prompt(self, prefix, stylesheet):

@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
 import signal
-import pkg_resources
-from .styles import CSSParser
 from .inputs import StringInput
 from .inputs import IntegerInput
 from .inputs import SelectInput
@@ -10,6 +8,7 @@ from .inputs import BooleanInput
 from .inputs import MultiSelectInput
 from .inputs import Branch
 from .utils import numeric_options
+from .utils import prepare_stylesheet
 
 
 class AddAction(object):
@@ -68,15 +67,7 @@ class Form(object):
     def run(self, prefix=None, stylesheet=None):
         styles = None
 
-        if stylesheet:
-            styles = CSSParser.parse_string(stylesheet)
-        else:
-            stream = pkg_resources.resource_stream(
-                'promptly.resources',
-                'default.css'
-            )
-
-            styles = CSSParser.parse_string(stream.read())
+        styles = prepare_stylesheet(stylesheet)
 
         prefix = '' if prefix is None else prefix
         for label, input in iter(self._fields):

@@ -469,5 +469,5 @@ class TestPromptly(unittest.TestCase):
         data = dict(form)
 
         self.assertTrue(len(form.flavors.value) == 2)
-        self.assertTrue(data['flavors'][0] == (1, 'apple'))
-        self.assertTrue(data['flavors'][1] == (3, 'vanilla'))
+        self.assertTrue((1, 'apple') in data['flavors'])
+        self.assertTrue((3, 'vanilla') in data['flavors'])
