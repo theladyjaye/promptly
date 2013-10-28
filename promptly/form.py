@@ -62,15 +62,6 @@ class Form(object):
     def _add(self, key, obj):
         self._fields.append((key, obj))
 
-    def run(self, prefix=None, stylesheet=None):
-        styles = None
-
-        styles = prepare_stylesheet(stylesheet)
-
-        prefix = '' if prefix is None else prefix
-        for label, input in iter(self._fields):
-            input(form=self, prefix=prefix, stylesheet=styles)
-
     def __len__(self):
         return len(self._fields)
 

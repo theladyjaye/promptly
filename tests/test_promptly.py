@@ -1,10 +1,7 @@
 import unittest
-from mock import Mock
 from promptly import Form
-from promptly import inputs
-
-# TODO before 0.4 release
-# add tests for multiselect
+from promptly import console
+from .runner import run
 
 
 class TestPromptly(unittest.TestCase):
@@ -28,13 +25,6 @@ class TestPromptly(unittest.TestCase):
     def test_prompt_string(self):
         returns = ['lucy']
 
-        def side_effect(*args):
-            result = returns.pop(0)
-            return result
-
-        input = Mock(side_effect=side_effect)
-        inputs.input = input
-
         form = Form()
 
         form.add.string(
@@ -43,22 +33,15 @@ class TestPromptly(unittest.TestCase):
             default='Aubrey'
         )
 
-        form.run()
+        mock = run(form, returns)
 
-        self.assertTrue(input.call_count == 1)
+        self.assertTrue(mock.call_count == 1)
         data = dict(form)
 
         self.assertTrue(data['name'] == 'lucy')
 
     def test_prompt_string_default(self):
         returns = ['']
-
-        def side_effect(*args):
-            result = returns.pop(0)
-            return result
-
-        input = Mock(side_effect=side_effect)
-        inputs.input = input
 
         form = Form()
 
@@ -68,9 +51,8 @@ class TestPromptly(unittest.TestCase):
             default='lucy'
         )
 
-        form.run()
-
-        self.assertTrue(input.call_count == 1)
+        mock = run(form, returns)
+        self.assertTrue(mock.call_count == 1)
         data = dict(form)
 
         self.assertTrue(data['name'] == 'lucy')
@@ -78,24 +60,16 @@ class TestPromptly(unittest.TestCase):
     def test_prompt_int(self):
         returns = ['22']
 
-        def side_effect(*args):
-            result = returns.pop(0)
-            return result
-
-        input = Mock(side_effect=side_effect)
-        inputs.input = input
-
         form = Form()
-
         form.add.int(
             'age',
             'What is your age?',
             default='5'
         )
 
-        form.run()
+        mock = run(form, returns)
 
-        self.assertTrue(input.call_count == 1)
+        self.assertTrue(mock.call_count == 1)
         data = dict(form)
 
         self.assertTrue(data['age'] == 22)
@@ -103,24 +77,16 @@ class TestPromptly(unittest.TestCase):
     def test_prompt_int_default(self):
         returns = ['']
 
-        def side_effect(*args):
-            result = returns.pop(0)
-            return result
-
-        input = Mock(side_effect=side_effect)
-        inputs.input = input
-
         form = Form()
-
         form.add.int(
             'age',
             'What is your age?',
             default=5
         )
 
-        form.run()
+        mock = run(form, returns)
 
-        self.assertTrue(input.call_count == 1)
+        self.assertTrue(mock.call_count == 1)
         data = dict(form)
 
         self.assertTrue(data['age'] == 5)
@@ -128,15 +94,7 @@ class TestPromptly(unittest.TestCase):
     def test_prompt_select(self):
         returns = ['1']
 
-        def side_effect(*args):
-            result = returns.pop(0)
-            return result
-
-        input = Mock(side_effect=side_effect)
-        inputs.input = input
-
         form = Form()
-
         form.add.select(
             'color',
             'What is your favorite color?',
@@ -144,9 +102,9 @@ class TestPromptly(unittest.TestCase):
             default=2
         )
 
-        form.run()
+        mock = run(form, returns)
 
-        self.assertTrue(input.call_count == 1)
+        self.assertTrue(mock.call_count == 1)
         data = dict(form)
 
         self.assertTrue(data['color'][0] == 1)
@@ -155,15 +113,7 @@ class TestPromptly(unittest.TestCase):
     def test_prompt_select_default(self):
         returns = ['']
 
-        def side_effect(*args):
-            result = returns.pop(0)
-            return result
-
-        input = Mock(side_effect=side_effect)
-        inputs.input = input
-
         form = Form()
-
         form.add.select(
             'color',
             'What is your favorite color?',
@@ -171,9 +121,9 @@ class TestPromptly(unittest.TestCase):
             default=2
         )
 
-        form.run()
+        mock = run(form, returns)
 
-        self.assertTrue(input.call_count == 1)
+        self.assertTrue(mock.call_count == 1)
         data = dict(form)
 
         self.assertTrue(data['color'][0] == 2)
@@ -182,15 +132,7 @@ class TestPromptly(unittest.TestCase):
     def test_prompt_bool_false(self):
         returns = ['0', 'no', 'false', 'off', 'n', 'f']
 
-        def side_effect(*args):
-            result = returns.pop(0)
-            return result
-
-        input = Mock(side_effect=side_effect)
-        inputs.input = input
-
         form = Form()
-
         form.add.bool(
             'yaks0',
             'Do you likes yaks?',
@@ -217,8 +159,8 @@ class TestPromptly(unittest.TestCase):
             default=True
         )
 
-        form.run()
-        self.assertTrue(input.call_count == 6)
+        mock = run(form, returns)
+        self.assertTrue(mock.call_count == 6)
         data = dict(form)
 
         self.assertTrue(data['yaks0'] == False)
@@ -231,15 +173,7 @@ class TestPromptly(unittest.TestCase):
     def test_prompt_bool_true(self):
         returns = ['1', 'yes', 'true', 'on', 'y', 't']
 
-        def side_effect(*args):
-            result = returns.pop(0)
-            return result
-
-        input = Mock(side_effect=side_effect)
-        inputs.input = input
-
         form = Form()
-
         form.add.bool(
             'yaks0',
             'Do you likes yaks?',
@@ -266,8 +200,8 @@ class TestPromptly(unittest.TestCase):
             default=False
         )
 
-        form.run()
-        self.assertTrue(input.call_count == 6)
+        mock = run(form, returns)
+        self.assertTrue(mock.call_count == 6)
         data = dict(form)
 
         self.assertTrue(data['yaks0'] == True)
@@ -280,23 +214,16 @@ class TestPromptly(unittest.TestCase):
     def test_prompt_bool_true_default(self):
         returns = ['']
 
-        def side_effect(*args):
-            result = returns.pop(0)
-            return result
-
-        input = Mock(side_effect=side_effect)
-        inputs.input = input
-
         form = Form()
-
         form.add.bool(
             'yaks',
             'Do you likes yaks?',
             default=True
         )
 
-        form.run()
-        self.assertTrue(input.call_count == 1)
+        mock = run(form, returns)
+
+        self.assertTrue(mock.call_count == 1)
         data = dict(form)
 
         self.assertTrue(data['yaks'] == True)
@@ -304,23 +231,15 @@ class TestPromptly(unittest.TestCase):
     def test_prompt_bool_false_default(self):
         returns = ['']
 
-        def side_effect(*args):
-            result = returns.pop(0)
-            return result
-
-        input = Mock(side_effect=side_effect)
-        inputs.input = input
-
         form = Form()
-
         form.add.bool(
             'yaks',
             'Do you likes yaks?',
             default=False
         )
 
-        form.run()
-        self.assertTrue(input.call_count == 1)
+        mock = run(form, returns)
+        self.assertTrue(mock.call_count == 1)
         data = dict(form)
 
         self.assertTrue(data['yaks'] == False)
@@ -328,15 +247,7 @@ class TestPromptly(unittest.TestCase):
     def test_prompt_loop_simple(self):
         returns = ['ollie', '22', 'n', '']
 
-        def side_effect(*args):
-            result = returns.pop(0)
-            return result
-
-        input = Mock(side_effect=side_effect)
-        inputs.input = input
-
         form = Form()
-
         form.add.string(
             'name',
             'What is your name?',
@@ -356,9 +267,9 @@ class TestPromptly(unittest.TestCase):
             default=2
         )
 
-        form.run()
+        mock = run(form, returns)
 
-        self.assertTrue(input.call_count == 4)
+        self.assertTrue(mock.call_count == 4)
         data = dict(form)
 
         self.assertTrue(data['name'] == 'ollie')
@@ -370,15 +281,7 @@ class TestPromptly(unittest.TestCase):
     def test_prompt_loop_repeat(self):
         returns = ['lucy', 'foo', 'bar', '99', 'y', '3']
 
-        def side_effect(*args):
-            result = returns.pop(0)
-            return result
-
-        input = Mock(side_effect=side_effect)
-        inputs.input = input
-
         form = Form()
-
         form.add.string(
             'name',
             'What is your name?',
@@ -398,9 +301,9 @@ class TestPromptly(unittest.TestCase):
             default=2
         )
 
-        form.run()
+        mock = run(form, returns)
 
-        self.assertTrue(input.call_count == 6)
+        self.assertTrue(mock.call_count == 6)
         data = dict(form)
 
         self.assertTrue(data['name'] == 'lucy')
@@ -412,10 +315,6 @@ class TestPromptly(unittest.TestCase):
     def test_branch(self):
         returns = ['99', 'lucy']
 
-        def side_effect(*args):
-            result = returns.pop(0)
-            return result
-
         def branch(form, age, name):
             f = Form()
             f.add.int('age', 'What is your age?', default=age)
@@ -424,14 +323,12 @@ class TestPromptly(unittest.TestCase):
             self.assertTrue(age == 1)
             return f
 
-        input = Mock(side_effect=side_effect)
-        inputs.input = input
-
         form = Form()
         form.add.branch(branch, 1, name='clark')
-        form.run()
 
-        self.assertTrue(input.call_count == 2)
+        mock = run(form, returns)
+
+        self.assertTrue(mock.call_count == 2)
         data = dict(form)
 
         self.assertTrue(len(form) == 3)
@@ -451,33 +348,35 @@ class TestPromptly(unittest.TestCase):
         # is 3 + 1 -> 4
         returns = ['1', '3', '4']
 
-        def side_effect(*args):
-            result = returns.pop(0)
-            return result
-
-        input = Mock(side_effect=side_effect)
-        inputs.input = input
-
         form = Form()
         form.add.multiselect(
             'flavors',
             'Select your favorite flavors',
             choices)
-        form.run()
 
-        self.assertTrue(input.call_count == 3)
+        mock = run(form, returns)
+
+        self.assertTrue(mock.call_count == 3)
         data = dict(form)
 
         self.assertTrue(len(form.flavors.value) == 2)
         self.assertTrue((1, 'apple') in data['flavors'])
         self.assertTrue((3, 'vanilla') in data['flavors'])
 
-    def test_runner(self):
-        from promptly import runners
+    def xtest_runner(self):
         form = Form()
         form.add.int('age', 'What is your Age?', default=21, notifications=(
             'This will be used to help guide your experince',
             'Additionally you will be a winner!'))
+
+        def branch(form):
+            branch = Form()
+            branch.add.bool('bark', 'Do you like to bark?', default=True)
+            branch.add.bool('run', 'Do you like to run?', default=True)
+            branch.add.string('munch', 'Favorite munch?')
+            return branch
+
+        form.add.branch(branch)
 
         form.add.string('name', 'What is your Name?', default='Clark')
         form.add.bool('likes_dogs', 'Do you like Dogs?', default=True)
@@ -490,7 +389,11 @@ class TestPromptly(unittest.TestCase):
             choices=('Lucy', 'Ollie', 'Dexter', 'Tucker'),
             default=3)
 
-        runners.console(form, '')
+        form.add.multiselect('dog3', 'Which dog do you like?',
+            choices=('Lucy', 'Ollie', 'Dexter', 'Tucker'))
+
+        console(form, '[promptly] ')
+        # runners.console(form, '[promptly] ')
         data = dict(form)
         from pprint import pprint
         pprint(data)
@@ -499,4 +402,4 @@ class TestPromptly(unittest.TestCase):
         #     'flavors',
         #     'Select your favorite flavors',
         #     choices)
-        # form.run()
+        #

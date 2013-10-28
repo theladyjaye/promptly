@@ -1,16 +1,8 @@
 from __future__ import unicode_literals
 from promptly.styles import Style
-
-
-class Prompt(object):
-    def process_value(self, value):
-        return value
-
-    def apply_default(self, value):
-        if len(value) == 0 and self.input.default:
-            return self.input.default
-
-        return value
+from promptly.compat import unichr
+from promptly.compat import unicode
+from .core import Prompt
 
 
 class ConsolePrompt(Prompt):
@@ -103,6 +95,7 @@ class IntegerPrompt(ConsolePrompt):
 
 
 class BooleanPrompt(ConsolePrompt):
+
     def process_value(self, value):
         boolean_states = {
         True: True, '1': True, 'yes': True, 'true': True, 'on': True, 'y': True, 't': True,
@@ -240,6 +233,31 @@ class SelectPrompt(ConsolePrompt):
 
 
 class MultiSelectPrompt(ConsolePrompt):
+    def __init__(self, runner, input, prefix, stylesheet):
+        super(MultiSelectPrompt, self).__init__(runner, input, prefix, stylesheet)
+        self.values = set()
+
+    def process_value(self, value):
+        choices = self.input.choices
+        choices_count = len(choices)
+
+        try:
+            obj = next(x for x in choices if str(x[0]) == str(value))
+        except StopIteration:
+            pass
+
+        # Did we get the "Done" option?
+        if choices.index(obj) == (choices_count - 1):
+            return tuple(self.values)
+
+        if obj in self.values:
+            self.values.remove(obj)
+        else:
+            self.values.add(obj)
+
+        # force the run loop to contine
+        raise Exception
+
     @property
     def default(self):
         return None
@@ -250,86 +268,62 @@ class MultiSelectPrompt(ConsolePrompt):
         stylesheet = self.stylesheet
         prefix = self.prefix
 
-        styles_prefix = self.styles_for_key('prefix', stylesheet)
-        styles_label = self.styles_for_key('choices.label', stylesheet)
+        styles_prefix = Style.styles_for_key('prefix', stylesheet)
+        styles_label = Style.styles_for_key('choices.label', stylesheet)
 
-        styles_default_wrapper = self.styles_for_key(
+        styles_default_wrapper = Style.styles_for_key(
             'choices.default_wrapper', stylesheet)
 
-        styles_default_value = self.styles_for_key(
+        styles_default_value = Style.styles_for_key(
             'choices.default_value', stylesheet)
 
-        styles_option_key = self.styles_for_key(
+        styles_option_key = Style.styles_for_key(
             'choices.option_key', stylesheet)
 
-        styles_option_value = self.styles_for_key(
+        styles_option_value = Style.styles_for_key(
             'choices.option_value', stylesheet)
 
-        styles_seperator = self.styles_for_key('choices.seperator', stylesheet)
-        styles_action = self.styles_for_key('choices.action', stylesheet)
-        styles_selection = self.styles_for_key('choices.selection', stylesheet)
+        styles_seperator = Style.styles_for_key(
+            'choices.seperator', stylesheet)
 
-        prompt = '%s' % styles_label(self.label)
+        styles_action = Style.styles_for_key(
+            'choices.action', stylesheet)
+
+        styles_selection = Style.styles_for_key(
+            'choices.selection', stylesheet)
+
+        prompt = '%s' % styles_label(input.label)
 
         choices = []
-        choices_count = len(self.choices)
+        choices_count = len(input.choices)
 
-        for i, each in enumerate(self.choices):
+        prompt = '%s%s' % (
+            styles_prefix(prefix),
+            prompt)
+
+        for i, each in enumerate(input.choices):
             key, value = each
             prefix = '[ ] '
 
             if i == (choices_count - 1):
                 prefix = ''
-            elif each in self.value:
+            elif each in self.values:
                 prefix = '[%s] ' % styles_selection('x')
 
             choices.append('%s%s %s' % (
-                styles_option_key(key),
+                styles_option_key(unicode(key)),
                 styles_seperator(')'),
                 styles_option_value('%s%s' % (prefix, value))))
 
-        prompt = '%s%s\n%s%s' % (
+        prompt = self.append_notifications(prompt, input.notifications)
+
+        dot = unichr(0x00b7)
+        styles_notification_footer = Style.styles_for_key(
+            'notification.footer', stylesheet)
+
+        prompt = '%s\n%s%s' % (
             prompt,
             '\n'.join(choices),
-            styles_prefix(prefix),
-            styles_action('Select Options'))
-
+            styles_notification_footer('\n'.ljust(4, dot)))
 
         return prompt
-
-    def __call__(self, form, prefix=None, stylesheet=None):
-
-        choices_count = len(self.choices)
-
-        while 1:
-            prompt = '%s' % (self.build_prompt(
-                prefix=prefix,
-                stylesheet=stylesheet))
-
-            data = self.apply_default(input('\n%s ' % prompt))
-
-            try:
-                obj = next(x for x in self.choices if str(x[0]) == str(data))
-            except StopIteration:
-                continue
-
-            if self.choices.index(obj) == (choices_count - 1):
-                self.value = list(self.value)
-                break
-
-            if obj in self.value:
-                self.value = self.value - frozenset([obj])
-                continue
-
-            try:
-                self.process_data(data)
-            except:
-                continue
-
-    def process_data(self, data):
-        result = [x for x in self.choices if str(x[0]) == str(data)]
-
-        if not result:
-            raise ValueError
-
-        self.value.add(result[0])

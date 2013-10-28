@@ -5,6 +5,7 @@ from promptly.styles import Style
 from promptly.utils import prepare_stylesheet
 from promptly.renderers import console
 from promptly.compat import input as get_input
+from promptly import Notification
 
 
 def run(form, prefix=None, stylesheet=None):
@@ -13,6 +14,21 @@ def run(form, prefix=None, stylesheet=None):
 
 
 class ConsoleRunner(object):
+
+    @staticmethod
+    def notice(text, prefix=None, stylesheet=None):
+        styles = prepare_stylesheet(stylesheet)
+        prefix = '' if prefix is None else prefix
+        message = Notification(text)
+
+        obj = console.NotificationPrompt(
+            runner=None,
+            input=message,
+            prefix=prefix,
+            stylesheet=styles)
+
+        sys.stdout.write('\n%s' % obj.prompt)
+        sys.stdout.flush()
 
     def __init__(self, form, prefix=None, stylesheet=None):
         self.form = form
@@ -25,6 +41,9 @@ class ConsoleRunner(object):
         sys.stdout.write(Style.reset_all)
         print ('\nYou Quit! You\'re a quitter! Boo!\n')
         sys.exit(0)
+
+    def branch(self, label, input):
+        input(self.form)
 
     def notification(self, label, input, prefix=True):
         obj = self.factory(console.NotificationPrompt, input)
@@ -73,14 +92,15 @@ class ConsoleRunner(object):
 
     def run(self):
         loop = self.loop()
-        loop.next()
+        next(loop)
 
         for label, input in iter(self.form._fields):
             key = input.__class__.__name__.lower()
             prompt = getattr(self, key)(label, input)
-            data = loop.send(prompt)
-            input.value = data
-            loop.next()
+            if prompt:
+                data = loop.send(prompt)
+                input.value = data
+                next(loop)
 
     def prompt_format(self, prompt):
         stylesheet = self.stylesheet
