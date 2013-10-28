@@ -5,6 +5,29 @@ colorama.init()
 
 
 class Style(object):
+
+    reset_all = colorama.Style.RESET_ALL
+
+    @classmethod
+    def styles_for_key(cls, key, stylesheet):
+        styles = {}
+        context = stylesheet
+
+        try:
+            styles.update(context['selectors']['body']['value'])
+        except KeyError:
+            pass
+
+        for part in key.split('.'):
+            try:
+                context = context['selectors'][part]
+                styles.update(context['value'])
+
+            except KeyError:
+                break
+
+        return cls(styles)
+
     def __init__(self, data):
         self.data = data
 
@@ -40,11 +63,11 @@ class Style(object):
         # Fore: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
         # Back: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
         # Style: DIM, NORMAL, BRIGHT, RESET_ALL
-        return self.color + \
+        return self.reset_all + self.color + \
                self.background_color + \
                self.font_weight + \
-               str(value) + \
-               colorama.Style.RESET_ALL
+               value + \
+               self.reset_all
 
 
 class CSSTokens(object):

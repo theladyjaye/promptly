@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 import sys
-import signal
-from .inputs import StringInput
-from .inputs import IntegerInput
-from .inputs import SelectInput
-from .inputs import BooleanInput
-from .inputs import MultiSelectInput
+from .inputs import String
+from .inputs import Integer
+from .inputs import Select
+from .inputs import Boolean
+from .inputs import MultiSelect
 from .inputs import Branch
 from .utils import numeric_options
 from .utils import prepare_stylesheet
@@ -20,27 +19,27 @@ class AddAction(object):
         self.form._fields.append((key, obj))
 
     def string(self, key, label, **kwargs):
-        obj = StringInput(label, **kwargs)
+        obj = String(label, **kwargs)
         self.form._add(key, obj)
         return self.form
 
     def int(self, key, label, **kwargs):
-        obj = IntegerInput(label, **kwargs)
+        obj = Integer(label, **kwargs)
         self.form._add(key, obj)
         return self.form
 
     def select(self, key, label, choices, option_format=numeric_options, **kwargs):
-        obj = SelectInput(label, choices, option_format, **kwargs)
+        obj = Select(label, choices, option_format, **kwargs)
         self.form._add(key, obj)
         return self.form
 
     def multiselect(self, key, label, choices, done_label='Done', option_format=numeric_options, **kwargs):
-        obj = MultiSelectInput(label, choices, done_label, option_format, **kwargs)
+        obj = MultiSelect(label, choices, done_label, option_format, **kwargs)
         self.form._add(key, obj)
         return self.form
 
     def bool(self, key, label, **kwargs):
-        obj = BooleanInput(label, **kwargs)
+        obj = Boolean(label, **kwargs)
         self.form._add(key, obj)
         return self.form
 
@@ -59,7 +58,6 @@ class Form(object):
 
     def __init__(self):
         self._fields = []
-        signal.signal(signal.SIGINT, self._on_sigint)
 
     def _add(self, key, obj):
         self._fields.append((key, obj))
@@ -89,8 +87,3 @@ class Form(object):
             return next(x[1] for x in self._fields if x[0] == key)
         except StopIteration:
             raise AttributeError
-
-    # signal handlers
-    def _on_sigint(self, signal, frame):
-        print ('You Quit! You\'re a quitter! Boo!')
-        sys.exit(0)

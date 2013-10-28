@@ -21,6 +21,6 @@ def itervalues(value):
 
 def input(prompt):
     if is_py2:
-        return raw_input(prompt)
+        return raw_input(prompt.encode(sys.stdout.encoding))
     else:
         return input(prompt)

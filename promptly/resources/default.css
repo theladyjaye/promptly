@@ -3,18 +3,34 @@ body{
     font-weight:normal;
 }
 
+.action{
+    color:magenta;
+    font-weight:bold;
+}
+
+.input{
+    color:white;
+    font-weight:bold;
+}
+
 .prompt{
     color:red;
 }
 
 .prefix{
     color:blue;
-    font-weight:lighter;
+    font-weight:bold;
 }
 
 .notification .label{
     color:white;
     font-weight:bold;
+}
+
+
+.notification .footer{
+    color:white;
+    font-weight:normal;
 }
 
 

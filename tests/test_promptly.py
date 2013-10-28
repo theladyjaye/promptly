@@ -471,3 +471,32 @@ class TestPromptly(unittest.TestCase):
         self.assertTrue(len(form.flavors.value) == 2)
         self.assertTrue((1, 'apple') in data['flavors'])
         self.assertTrue((3, 'vanilla') in data['flavors'])
+
+    def test_runner(self):
+        from promptly import runners
+        form = Form()
+        form.add.int('age', 'What is your Age?', default=21, notifications=(
+            'This will be used to help guide your experince',
+            'Additionally you will be a winner!'))
+
+        form.add.string('name', 'What is your Name?', default='Clark')
+        form.add.bool('likes_dogs', 'Do you like Dogs?', default=True)
+        form.add.select('dog', 'Which dog do you like?',
+            choices=('Lucy', 'Ollie', 'Dexter', 'Tucker'),
+            default=3,
+            notifications=('Hint, all of them are great!',))
+
+        form.add.select('dog2', 'Which dog do you like?',
+            choices=('Lucy', 'Ollie', 'Dexter', 'Tucker'),
+            default=3)
+
+        runners.console(form, '')
+        data = dict(form)
+        from pprint import pprint
+        pprint(data)
+
+        # form.add.multiselect(
+        #     'flavors',
+        #     'Select your favorite flavors',
+        #     choices)
+        # form.run()
