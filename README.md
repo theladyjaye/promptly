@@ -5,6 +5,147 @@
 A little python utility to help you build command line prompts that can
 be styled using CSS.
 
+# Changes
+
+## v0.5
+## WARNING 0.5 is backwards incompatible
+
+This should be the last backwards incompatible update for a while. v0.5
+saw a redesign of how forms are run. This was done in the hope that one day
+I have time to do a curses or urwid implementation. We will see. On the whole
+though it does make it more confirguable for individuals that do not like
+the default form rendering as Promptly now supports form runners.
+
+What are form runners? Well put simply, in prior versions you would call:
+
+```python
+    # < v0.5
+    from promptly import From
+
+
+    form = Form()
+    form.add.string('favorite_food', 'What is your favorite food?')
+    form.run()
+```
+
+This worked well, but it bound the prompts to a single implementation of the
+`Form` object. `v0.5` treats the `Form` object as more of a collection and the
+runners figure out how to deal with it. Lets take a look at the example from
+above in in `v0.5`:
+
+```python
+    # v0.5+
+    from promptly import From
+    form promptly import console
+
+
+    form = Form()
+    form.add.string('favorite_food', 'What is your favorite food?')
+    console.run(form)
+```
+
+Pretty much exactly the same, but we just hand the form off to the
+run to deal with, instead of the form.
+
+Some additional changes, the `promptly.inputs.*` have all been renamed
+and simplified. Now they basically act as marker classes for input types.
+They help the runner identify the kind of prompts to generate.
+
+The logic, such as `StringInput.build_prompt`, basically got moved into
+`promptly.renderers.console.StringPrompt`. If you were always using the
+shortcut syntax for cerating your forms:
+
+```python
+    form.add.string(...)
+    form.add.bool(...)
+    form.add.int(...)
+    form.add.select(...)
+    form.add.multiselect(...)
+```
+
+Then you don't have to worry about anything, everything should still
+work fine for you. If you were using the more verbose style:
+
+```python
+
+        form.add(
+            'age',
+            IntegerInput('What is your age?',
+            default=1)
+        )
+```
+
+Things will break for you. It's probably better to always be using the
+shortcuts.
+
+All of the input types now take "notifications" This is a convenient way
+to annotate your questions. Lets take a look at a prompt with notifications
+and the same prompt without notifications.
+
+First, no notifications:
+
+```python
+    from promptly import From
+    form promptly import console
+
+
+    form = Form()
+    form.add.string('name', 'What is your name?', default='Lucy')
+    console.run(form, prefix='[promptly] ')
+```
+
+That will generate a prompt that looks like this:
+
+```
+    [promptly] What is your name?
+    > Lucy
+```
+
+Now lets look at the same prompt with notifications:
+
+```python
+    from promptly import From
+    form promptly import console
+
+
+    form = Form()
+    form.add.string(
+        'name',
+        'What is your name?',
+        notifications=('This will help to identify you later', 'Identification is fun!')
+        default='Lucy')
+    console.run(form, prefix='[promptly] ')
+```
+
+That will generate a prompt that looks like this:
+
+```
+    [promptly] What is your name?
+    This will help to identify you later
+    Identification is fun!
+    ···
+    > Lucy
+```
+
+The notifications appear after the question, but before the user input.
+
+The available CSS styles have also been updated to account for these.
+See the list below for the default styles available.
+
+There is also convenience function for just dropping notifications
+to the console without running though a form. They will be styled according
+to the notification and prefix styles:
+
+```python
+    from promptly import console
+
+    console.notification('Hello World', prefix='[notice] ', stylesheet=None)
+```
+
+This will immediately write a message to sys.stdout.
+
+## v0.4
+**Migration Guide**
 ## WARNING 0.4 is backwards incompatible
 
 **Migration Guide**
@@ -248,23 +389,50 @@ for obvious reasons. But you should feel free too if you so desire.
 The additional styles effectively cascade on top of body.
 
 
+New selectors in `v0.5`
+`.action` represents the Cheveron before the user input is displayed.
+`.input` are the style for the user input.
+`.notification .footer` are the styles for the 3 dots that appear below
+selection choices and after notifications.
+
 ```css
     body{
+    color:white;
+    font-weight:normal;
+    }
+
+    .action{
+        color:magenta;
+        font-weight:bold;
+    }
+
+    .input{
         color:white;
-        font-weight:normal;
+        font-weight:bold;
     }
 
     .prefix{
         color:blue;
-        font-weight:lighter;
+        font-weight:bold;
+    }
+
+    .notification .label{
+        color:white;
+        font-weight:bold;
+    }
+
+    .notification .footer{
+        color:white;
+        font-weight:normal;
     }
 
     .string .label{
-        color:magenta;
+        color:white;
     }
 
     .string .default-wrapper{
         color:white;
+        font-weight:bold;
     }
 
     .string .default-value{
@@ -272,11 +440,12 @@ The additional styles effectively cascade on top of body.
     }
 
     .integer .label{
-        color:magenta;
+        color:white;
     }
 
     .integer .default-wrapper{
         color:white;
+        font-weight:bold;
     }
 
     .integer .default-value{
@@ -284,11 +453,12 @@ The additional styles effectively cascade on top of body.
     }
 
     .boolean .label{
-        color:magenta;
+        color:white;
     }
 
     .boolean .default-wrapper{
         color:white;
+        font-weight:bold;
     }
 
     .boolean .default-value{
@@ -301,14 +471,16 @@ The additional styles effectively cascade on top of body.
 
     .boolean .seperator{
         color:white;
+        font-weight:bold;
     }
 
     .choices .label{
-        color:magenta;
+        color:white;
     }
 
     .choices .default-wrapper{
         color:white;
+        font-weight:bold;
     }
 
     .choices .default-value{
@@ -326,10 +498,16 @@ The additional styles effectively cascade on top of body.
 
     .choices .option-value{
         color:white;
+        font-weight:bold;
     }
 
     .choices .action{
         color:magenta;
-
+        font-weight:bold;
     }
+
+    .choices .selection{
+        color:white;
+    }
+
 ```

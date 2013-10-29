@@ -8,14 +8,16 @@ with open('LICENSE') as f:
     license = f.read()
 
 packages = [
-    'promptly'
+    'promptly',
+    'promptly.renderers',
+    'promptly.runners'
 ]
 
 requires = ['colorama']
 
 setup(
     name='promptly',
-    version='0.4.3',
+    version='0.5.0',
     description='Console Prompting',
     long_description=readme,
     author='Aubrey Taylor <aubricus@gmail.com>, Adam Venturella <aventurella@gmail.com>',
@@ -35,5 +37,8 @@ setup(
         'License :: OSI Approved :: ISC License (ISCL)',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.1',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
     ),
 )

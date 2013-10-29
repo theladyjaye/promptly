@@ -13,22 +13,22 @@ def run(form, prefix=None, stylesheet=None):
     runner.run()
 
 
+def notification(text, prefix=None, stylesheet=None):
+    styles = prepare_stylesheet(stylesheet)
+    prefix = '' if prefix is None else prefix
+    message = Notification(text)
+
+    obj = console.NotificationPrompt(
+        runner=None,
+        input=message,
+        prefix=prefix,
+        stylesheet=styles)
+
+    sys.stdout.write('\n%s' % obj.prompt)
+    sys.stdout.flush()
+
+
 class ConsoleRunner(object):
-
-    @staticmethod
-    def notice(text, prefix=None, stylesheet=None):
-        styles = prepare_stylesheet(stylesheet)
-        prefix = '' if prefix is None else prefix
-        message = Notification(text)
-
-        obj = console.NotificationPrompt(
-            runner=None,
-            input=message,
-            prefix=prefix,
-            stylesheet=styles)
-
-        sys.stdout.write('\n%s' % obj.prompt)
-        sys.stdout.flush()
 
     def __init__(self, form, prefix=None, stylesheet=None):
         self.form = form
@@ -117,6 +117,8 @@ class ConsoleRunner(object):
 
     def render(self, value, default=None):
         # http://stackoverflow.com/questions/2533120/show-default-value-for-editing-on-python-input-possible/2533142#2533142
+        # windows: https://pypi.python.org/pypi/readline
+        #          https://pypi.python.org/pypi/pyreadline/2.0
         result = None
         if default:
             readline.set_startup_hook(lambda: readline.insert_text(default))

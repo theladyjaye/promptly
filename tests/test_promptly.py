@@ -364,6 +364,8 @@ class TestPromptly(unittest.TestCase):
         self.assertTrue((3, 'vanilla') in data['flavors'])
 
     def xtest_runner(self):
+        from promptly import console
+
         form = Form()
         form.add.int('age', 'What is your Age?', default=21, notifications=(
             'This will be used to help guide your experince',
@@ -392,7 +394,7 @@ class TestPromptly(unittest.TestCase):
         form.add.multiselect('dog3', 'Which dog do you like?',
             choices=('Lucy', 'Ollie', 'Dexter', 'Tucker'))
 
-        console(form, '[promptly] ')
+        console.run(form, '[promptly] ')
         # runners.console(form, '[promptly] ')
         data = dict(form)
         from pprint import pprint

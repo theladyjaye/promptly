@@ -8,4 +8,4 @@ from .inputs import Boolean
 from .inputs import Branch
 from .inputs import Notification
 from .utils import prepare_stylesheet
-from .runners.console import run as console
+from .runners import console
