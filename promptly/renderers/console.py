@@ -46,7 +46,7 @@ class NotificationPrompt(ConsolePrompt):
         styles_prefix = Style.styles_for_key('prefix', stylesheet)
         styles_label = Style.styles_for_key('notification.label', stylesheet)
 
-        return u'%s%s' % (styles_prefix(prefix),
+        return '%s%s' % (styles_prefix(prefix),
                          styles_label(input.label))
 
 
