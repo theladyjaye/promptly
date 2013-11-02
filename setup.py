@@ -1,6 +1,16 @@
 #!/usr/bin/env python
 from setuptools import setup
 
+
+def get_requires():
+    reqs = ['colorama']
+    try:
+        import readline
+    except ImportError:
+        reqs.append['pyreadline']
+
+    return reqs
+
 with open('README.md') as f:
     readme = f.read()
 
@@ -13,11 +23,12 @@ packages = [
     'promptly.runners'
 ]
 
-requires = ['colorama']
+
+requires = get_requires()
 
 setup(
     name='promptly',
-    version='0.5.0',
+    version='0.5.1',
     description='Console Prompting',
     long_description=readme,
     author='Aubrey Taylor <aubricus@gmail.com>, Adam Venturella <aventurella@gmail.com>',

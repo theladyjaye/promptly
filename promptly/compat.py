@@ -1,5 +1,10 @@
 import sys
 
+try:
+    import pyreadline as readline
+except ImportError:
+    import readline
+
 
 _ver = sys.version_info
 is_py2 = (_ver[0] == 2)

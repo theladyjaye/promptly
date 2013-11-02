@@ -1,10 +1,10 @@
 import sys
 import signal
-import readline
 from promptly.styles import Style
 from promptly.utils import prepare_stylesheet
 from promptly.renderers import console
 from promptly.compat import input as get_input
+from promptly.compat import readline
 from promptly import Notification
 
 
