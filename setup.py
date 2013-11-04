@@ -7,7 +7,7 @@ def get_requires():
     try:
         import readline
     except ImportError:
-        reqs.append['pyreadline']
+        reqs.append('pyreadline')
 
     return reqs
 
