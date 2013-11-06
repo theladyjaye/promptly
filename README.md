@@ -7,6 +7,33 @@ be styled using CSS.
 
 # Changes
 
+## v0.5.2
+Pyreadline does not supprt `set_startup_hook(lambda: readline.insert_text(default))`
+as such the defaults on windows based machines would not show up.
+
+The solution for this release was to alter the console renderer for string
+and integer input on those machines who have pyreadline installed.
+
+In that case the prompt will appear as follows:
+
+```
+Who is your favorite dog? [Lucy]
+>
+```
+
+Note that the default is tacked on to the end of the question.
+
+Compare this to the style we get when we have a system that
+supports readline:
+
+```
+Who is your favorite dog?
+> Lucy
+```
+
+Integers and String based prompts are rendered like this.
+
+
 ## v0.5.1
 Added some love for our Windows friends. We now check weather or not readline is available
 and if not install pyreadline in that case.
