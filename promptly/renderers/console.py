@@ -61,10 +61,10 @@ class StringPrompt(ConsolePrompt):
         styles_prefix = Style.styles_for_key('prefix', stylesheet)
         styles_label = Style.styles_for_key('string.label', stylesheet)
 
-        styles_default_wrapper = self.styles_for_key(
+        styles_default_wrapper = Style.styles_for_key(
             'string.default_wrapper', stylesheet)
 
-        styles_default_value = self.styles_for_key(
+        styles_default_value = Style.styles_for_key(
             'string.default_value', stylesheet)
 
         if not input.default:
