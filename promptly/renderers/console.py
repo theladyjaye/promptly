@@ -77,7 +77,7 @@ class StringPrompt(ConsolePrompt):
                 import pyreadline
                 prompt = '%s%s %s%s%s' % (
                     styles_prefix(prefix),
-                    styles_label(self.label),
+                    styles_label(input.label),
                     styles_default_wrapper('['),
                     styles_default_value(input.default),
                     styles_default_wrapper(']'))
@@ -121,7 +121,7 @@ class IntegerPrompt(ConsolePrompt):
                 import pyreadline
                 prompt = '%s%s %s%s%s' % (
                     styles_prefix(prefix),
-                    styles_label(self.label),
+                    styles_label(input.label),
                     styles_default_wrapper('['),
                     styles_default_value(input.default),
                     styles_default_wrapper(']'))
