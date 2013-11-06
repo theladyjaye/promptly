@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+import sys
 from promptly.styles import Style
 from promptly.compat import unichr
 from promptly.compat import unicode
@@ -59,9 +60,26 @@ class StringPrompt(ConsolePrompt):
 
         styles_prefix = Style.styles_for_key('prefix', stylesheet)
         styles_label = Style.styles_for_key('string.label', stylesheet)
+        styles_default_wrapper = self.styles_for_key('string.default_wrapper', stylesheet)
+        styles_default_value = self.styles_for_key('string.default_value', stylesheet)
 
-        prompt = '%s%s' % (styles_prefix(prefix),
-                           styles_label(input.label))
+        if not input.default:
+            prompt = '%s%s' % (styles_prefix(prefix),
+                               styles_label(input.label))
+        else:
+            try:
+                # pyreadline does not support set_startup_hook
+                # so we do the next best thing when it comes to defaults
+                import pyreadline
+                prompt = '%s%s %s%s%s' % (
+                    styles_prefix(prefix),
+                    styles_label(self.label),
+                    styles_default_wrapper('['),
+                    styles_default_value(input.default),
+                    styles_default_wrapper(']'))
+            except ImportError:
+                prompt = '%s%s' % (styles_prefix(prefix),
+                                   styles_label(input.label))
 
         return self.append_notifications(prompt, input.notifications)
 
