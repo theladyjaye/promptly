@@ -2,7 +2,8 @@ import sys
 import signal
 
 try:
-    import pyreadline as readline
+    import pyreadline
+    readline = pyreadline.rlmain.Readline()
 except ImportError:
     import readline
 
@@ -124,6 +125,7 @@ class ConsoleRunner(object):
         # http://stackoverflow.com/questions/2533120/show-default-value-for-editing-on-python-input-possible/2533142#2533142
         # windows: https://pypi.python.org/pypi/readline
         #          https://pypi.python.org/pypi/pyreadline/2.0
+
         result = None
         if default:
             readline.set_startup_hook(lambda: readline.insert_text(default))
