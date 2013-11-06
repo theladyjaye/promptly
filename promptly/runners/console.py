@@ -1,11 +1,10 @@
 import sys
 import signal
 
-try:
-    import pyreadline
-    readline = pyreadline.rlmain.Readline()
-except ImportError:
-    import readline
+# on windows pyreadline will be installed
+# pyreadline installs a file under the name
+# readline.py in site-packages
+import readline
 
 from promptly.styles import Style
 from promptly.utils import prepare_stylesheet
@@ -123,8 +122,13 @@ class ConsoleRunner(object):
 
     def render(self, value, default=None):
         # http://stackoverflow.com/questions/2533120/show-default-value-for-editing-on-python-input-possible/2533142#2533142
+        # http://stackoverflow.com/questions/3327524/crossplatform-method-for-inserting-text-into-raw-input-to-avoid-readine-in-pyt
         # windows: https://pypi.python.org/pypi/readline
         #          https://pypi.python.org/pypi/pyreadline/2.0
+        #
+        # Under windows we don't get the set_startup_hook functionality
+        # So the defaults will not be displayed.
+        # The prompts will be rendered differently for windows based clients
 
         result = None
         if default:
