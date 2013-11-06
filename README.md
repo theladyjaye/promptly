@@ -7,6 +7,10 @@ be styled using CSS.
 
 # Changes
 
+## v0.5.1
+Added some love for our Windows friends. We now check weather or not readline is available
+and if not install pyreadline in that case.
+
 ## v0.5
 ## WARNING 0.5 is backwards incompatible
 
