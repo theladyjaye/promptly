@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-import sys
 from .inputs import String
 from .inputs import Integer
 from .inputs import Select
 from .inputs import Boolean
 from .inputs import MultiSelect
 from .inputs import Branch
+from .inputs import Notification
 from .utils import numeric_options
-from .utils import prepare_stylesheet
 
 
 class AddAction(object):
@@ -17,6 +16,10 @@ class AddAction(object):
 
     def __call__(self, key, obj):
         self.form._fields.append((key, obj))
+
+    def notification(self, label):
+        obj = Notification(label)
+        self.form._add(id(obj), obj)
 
     def string(self, key, label, **kwargs):
         obj = String(label, **kwargs)
@@ -67,7 +70,8 @@ class Form(object):
 
     def __iter__(self):
         for k, v in iter(self._fields):
-            if not isinstance(v, Branch):
+            if not isinstance(v, Branch) and \
+               not isinstance(v, Notification):
                 yield k, v.value
 
     def __getattr__(self, key):

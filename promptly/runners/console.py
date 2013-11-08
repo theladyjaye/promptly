@@ -82,6 +82,17 @@ class ConsoleRunner(object):
             prompt = (yield)
 
             while 1:
+                if isinstance(prompt, console.NotificationPrompt):
+                    footer_style = prompt.footer_style
+                    seperator = prompt.seperator
+                    wrap = footer_style(seperator.ljust(3, seperator))
+
+                    notification = '\n%s\n%s\n%s\n' % \
+                                   (wrap, prompt.prompt, wrap)
+
+                    sys.stdout.write(notification)
+                    break
+
                 result = self.render(
                     prompt.prompt,
                     default=prompt.default)

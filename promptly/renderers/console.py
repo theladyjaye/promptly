@@ -19,11 +19,19 @@ class ConsolePrompt(Prompt):
             return str(self.input.default)
         return None
 
+    @property
+    def seperator(self):
+        return unichr(0x00b7)
+
+    @property
+    def footer_style(self):
+        return Style.styles_for_key('notification.footer', self.stylesheet)
+
     def append_notifications(self, prompt, notifications):
-        styles_footer = Style.styles_for_key('notification.footer', self.stylesheet)
+        styles_footer = self.footer_style
 
         notices = []
-        dot = unichr(0x00b7)
+        dot = self.seperator
 
         for each in notifications:
             x = self.runner.notification('', each, prefix=False)
