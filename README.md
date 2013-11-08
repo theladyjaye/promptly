@@ -7,6 +7,44 @@ be styled using CSS.
 
 # Changes
 
+## v0.5.3
+Notifications can now be added into forms. The effect for the console runner
+will be to simply print the notification and then continue to the next
+question in the form. When converting the form to a dict, like branches,
+notifications will not be included in the data that is returned.
+
+```python
+from promptly import console
+from promptly import Form
+
+form = Form()
+form.add.notification('Welcome to a promptly form')
+form.add.string('favorite_dog', 'Who is your favorite dog?', default='Lucy')
+form.add.notification('Thanks for filling out the form!')
+console.run(form)
+
+print(dict(form))
+```
+
+In the case of the above you would get a prompt sequence like this:
+
+```
+···
+Welcome to a promptly form
+···
+
+Who is your favorite dog?
+> Lucy
+
+···
+Thanks for filling out the form!
+···
+
+{'favorite_dog': 'Lucy'}
+
+```
+
+
 ## v0.5.2
 Pyreadline does not supprt `set_startup_hook(lambda: readline.insert_text(default))`
 as such the defaults on windows based machines would not show up.
