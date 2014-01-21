@@ -7,6 +7,25 @@ be styled using CSS.
 
 # Changes
 
+## v0.5.4
+
+Altered the console runners.console.ConsoleRunner.render()  to fix inconsistent
+rendering in some teminals.
+
+There was an issue on some terminals where passing the full prompt to
+to input/raw_input (py3 and py2 respectively) would do some interesting
+things with line wrapping and color codes. Part of the color code issue
+was probably related to `readline` and this reported documentation issue
+re ansi escapes for readline (http://bugs.python.org/issue17337#msg183328)
+
+http://bugs.python.org/issue17337
+
+The fix applied however, skips sending the majority of the prompt through
+input/raw_input and instead writes it to stdout. Only the single line
+for the actual prompting is now sent to input/raw_input. This appears
+to address the issue.
+
+
 ## v0.5.3
 Notifications can now be added into forms. The effect for the console runner
 will be to simply print the notification and then continue to the next
