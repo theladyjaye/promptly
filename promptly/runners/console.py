@@ -124,6 +124,11 @@ class ConsoleRunner(object):
         styles_action = Style.styles_for_key('action', stylesheet)
         styles_input = Style.styles_for_key('input', stylesheet)
 
+        # there appears to be an issue when feeding the whole
+        # prompt to input/raw_input (py3 and py2 respectively)
+        # So we send the text part of the prompt to stdout
+        # and only actualy have the single line with the
+        # prompt/default go to input/raw_input
         sys.stdout.write('\n%s\n' % prompt)
 
         return '%(action)s%(input)s' % {
@@ -132,14 +137,6 @@ class ConsoleRunner(object):
             styles_input.background_color +
             styles_input.font_weight
         }
-
-        # return '\n%(prompt)s\n%(action)s%(input)s' % {
-        #     'prompt': prompt,
-        #     'action': styles_action('> '),
-        #     'input': styles_input.color + \
-        #              styles_input.background_color + \
-        #              styles_input.font_weight
-        # }
 
     def render(self, value, default=None):
         # http://stackoverflow.com/questions/2533120/show-default-value-for-editing-on-python-input-possible/2533142#2533142
