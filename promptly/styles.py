@@ -1,5 +1,5 @@
 import colorama
-
+from colorama import Style as AnsiStyle
 
 colorama.init()
 

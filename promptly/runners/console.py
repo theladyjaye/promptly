@@ -7,6 +7,7 @@ import signal
 import readline
 
 from promptly.styles import Style
+from promptly.styles import AnsiStyle
 from promptly.utils import prepare_stylesheet
 from promptly.renderers import console
 from promptly.compat import input as get_input
@@ -123,13 +124,22 @@ class ConsoleRunner(object):
         styles_action = Style.styles_for_key('action', stylesheet)
         styles_input = Style.styles_for_key('input', stylesheet)
 
-        return '\n%(prompt)s\n%(action)s%(input)s' % {
-            'prompt': prompt,
+        sys.stdout.write('\n%s\n' % prompt)
+
+        return '%(action)s%(input)s' % {
             'action': styles_action('> '),
-            'input': styles_input.color + \
-                     styles_input.background_color + \
-                     styles_input.font_weight
+            'input': styles_input.color +
+            styles_input.background_color +
+            styles_input.font_weight
         }
+
+        # return '\n%(prompt)s\n%(action)s%(input)s' % {
+        #     'prompt': prompt,
+        #     'action': styles_action('> '),
+        #     'input': styles_input.color + \
+        #              styles_input.background_color + \
+        #              styles_input.font_weight
+        # }
 
     def render(self, value, default=None):
         # http://stackoverflow.com/questions/2533120/show-default-value-for-editing-on-python-input-possible/2533142#2533142
@@ -151,4 +161,5 @@ class ConsoleRunner(object):
         else:
             result = get_input(self.prompt_format(value))
 
+        sys.stdout.write(AnsiStyle.RESET_ALL)
         return result
