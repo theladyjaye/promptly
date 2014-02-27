@@ -7,6 +7,44 @@ be styled using CSS.
 
 # Changes
 
+## v0.6.0
+
+Inputs can now specify duplicate keys and a list will be returned, for example:
+```python
+from promptly import console
+from promptly import Form
+
+form = Form()
+
+form.add.string(
+    'name',
+    'What is your name?',
+    default='Ollie'
+)
+
+form.add.string(
+    'name',
+    'What is your other name?',
+    default='Potato'
+)
+
+form.add.int(
+    'number',
+    'Pick a number'
+)
+
+console.run(form)
+print(dict(form))
+
+#
+# {
+#   'name': ['value1', 'value2'],
+#   'number': 9
+# }
+#
+```
+
+
 ## v0.5.4
 
 Altered the console runners.console.ConsoleRunner.render()  to fix inconsistent
