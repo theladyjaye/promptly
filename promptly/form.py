@@ -69,10 +69,25 @@ class Form(object):
         return len(self._fields)
 
     def __iter__(self):
+        keys = {}
         for k, v in iter(self._fields):
             if not isinstance(v, Branch) and \
                not isinstance(v, Notification):
-                yield k, v.value
+
+                # if the key is specified more than once
+                # lets pack the values into an array
+                value = keys.setdefault(k, None)
+
+                if not value:
+                    keys[k] = v.value
+                    yield k, v.value
+                else:
+                    try:
+                        value.append(v.value)
+                    except AttributeError:
+                        keys[k] = [value] + [v.value]
+
+                    yield k, keys[k]
 
     def __getattr__(self, key):
         try:

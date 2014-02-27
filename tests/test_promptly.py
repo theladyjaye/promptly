@@ -1,6 +1,7 @@
 import unittest
 from promptly import Form
 from promptly import console
+from promptly import compat
 from .runner import run
 
 
@@ -65,6 +66,27 @@ class TestPromptly(unittest.TestCase):
             'age',
             'What is your age?',
             default='5'
+        )
+
+        mock = run(form, returns)
+
+        self.assertTrue(mock.call_count == 1)
+        data = dict(form)
+
+        self.assertTrue(data['age'] == 22)
+
+    def test_prompt_int_with_int(self):
+        '''From a user input perspective, the
+        values will always be strings, this test
+        is for a 'just-in-case' we get an int
+        instead of a string
+        '''
+        returns = [22]
+
+        form = Form()
+        form.add.int(
+            'age',
+            'What is your age?',
         )
 
         mock = run(form, returns)
@@ -362,6 +384,38 @@ class TestPromptly(unittest.TestCase):
         self.assertTrue(len(form.flavors.value) == 2)
         self.assertTrue((1, 'apple') in data['flavors'])
         self.assertTrue((3, 'vanilla') in data['flavors'])
+
+    def test_list_assignment(self):
+        returns = ['lucy', 'clark', 9]
+
+        form = Form()
+
+        form.add.string(
+            'name',
+            'What is your name?',
+            default='Ollie'
+        )
+
+        form.add.string(
+            'name',
+            'What is your other name?',
+            default='Ollie'
+        )
+
+        form.add.int(
+            'number',
+            'Pick a number'
+        )
+
+        mock = run(form, returns)
+
+        self.assertTrue(mock.call_count == 3)
+        data = dict(form)
+
+        self.assertFalse(isinstance(data['name'], compat.string_types))
+        self.assertTrue(data['name'][0] == 'lucy')
+        self.assertTrue(data['name'][1] == 'clark')
+        self.assertTrue(data['number'] == 9)
 
     def xtest_runner(self):
         from promptly import console
