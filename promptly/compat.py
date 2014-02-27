@@ -7,9 +7,11 @@ is_py3 = (_ver[0] == 3)
 if is_py3:
     unichr = chr
     unicode = str
+    string_types = str
 else:
     unichr = unichr
     unicode = unicode
+    string_types = basestring
 
 
 def iteritems(value):
