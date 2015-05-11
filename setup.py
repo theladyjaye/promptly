@@ -3,7 +3,7 @@ from setuptools import setup
 
 
 def get_requires():
-    reqs = ['colorama']
+    reqs = ['colorama', 'six']
     try:
         import readline
     except ImportError:
