@@ -3,7 +3,11 @@ import sys
 from promptly.styles import Style
 from promptly.compat import unichr
 from promptly.compat import unicode
+from promptly.exceptions import (
+    ValidationException, RepromptException
+)
 from .core import Prompt
+
 
 
 class ConsolePrompt(Prompt):
@@ -101,7 +105,7 @@ class IntegerPrompt(ConsolePrompt):
         try:
             return int(value)
         except ValueError:
-            raise
+            raise ValidationException
 
     @property
     def prompt(self):
@@ -153,7 +157,7 @@ class BooleanPrompt(ConsolePrompt):
         try:
             return boolean_states[candidate]
         except KeyError:
-            raise
+            raise ValidationException
 
     @property
     def default(self):
@@ -213,7 +217,7 @@ class SelectPrompt(ConsolePrompt):
         result = [x for x in self.input.choices if str(x[0]) == str(value)]
 
         if not result:
-            raise ValueError
+            raise ValidationException
 
         return result[0]
 
@@ -302,7 +306,7 @@ class MultiSelectPrompt(ConsolePrompt):
             self.values.add(obj)
 
         # force the run loop to contine
-        raise Exception
+        raise RepromptException
 
     @property
     def default(self):

@@ -11,6 +11,9 @@ from promptly.styles import AnsiStyle
 from promptly.utils import prepare_stylesheet
 from promptly.renderers import console
 from promptly.compat import input_compat as get_input
+from promptly.exceptions import (
+    ValidationException, RepromptException
+)
 from promptly import Notification
 
 
@@ -105,7 +108,9 @@ class ConsoleRunner(object):
                 # failure.
                 try:
                     result = prompt.process_value(result)
-                except:
+                except ValidationException:
+                    continue
+                except RepromptException:
                     continue
                 break
             yield result
