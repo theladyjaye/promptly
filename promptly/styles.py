@@ -1,4 +1,8 @@
+import six
 import colorama
+
+# import this name for other promptly modules
+# to use
 from colorama import Style as AnsiStyle
 
 colorama.init()
@@ -87,6 +91,9 @@ class CSSParser(object):
         return parser.parse(value)
 
     def parse(self, value):
+        if six.PY3:
+            value = value.decode('utf-8')
+
         sheet = {'selectors':{}}
 
         context = sheet

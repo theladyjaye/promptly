@@ -28,7 +28,7 @@ requires = get_requires()
 
 setup(
     name='promptly',
-    version='0.6.2',
+    version='0.6.3',
     description='Console Prompting',
     long_description=readme,
     author='Aubrey Taylor <aubricus@gmail.com>, Adam Venturella <aventurella@gmail.com>',
