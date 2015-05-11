@@ -1,10 +1,9 @@
 import sys
+import six
+from six.moves import input
 
-_ver = sys.version_info
-is_py2 = (_ver[0] == 2)
-is_py3 = (_ver[0] == 3)
 
-if is_py3:
+if six.PY3:
     unichr = chr
     unicode = str
     string_types = str
@@ -15,21 +14,15 @@ else:
 
 
 def iteritems(value):
-    if is_py2:
-        return value.iteritems()
-
-    return value.items()
+    return six.iteritems(value)
 
 
 def itervalues(value):
-    if is_py2:
-        return value.itervalues()
-
-    return value.values()
+    return six.itervalues(value)
 
 
-def input(prompt):
-    if is_py2:
-        return raw_input(prompt.encode(sys.stdout.encoding))
+def input_compat(prompt):
+    if six.PY2:
+        return input(prompt.encode(sys.stdout.encoding))
     else:
         return input(prompt)

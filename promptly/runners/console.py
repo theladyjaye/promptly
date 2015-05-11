@@ -10,7 +10,7 @@ from promptly.styles import Style
 from promptly.styles import AnsiStyle
 from promptly.utils import prepare_stylesheet
 from promptly.renderers import console
-from promptly.compat import input as get_input
+from promptly.compat import input_compat as get_input
 from promptly import Notification
 
 
@@ -78,11 +78,11 @@ class ConsoleRunner(object):
         return cls(self, input, self.prefix, self.stylesheet)
 
     def loop(self):
-        while 1:
+        while True:
             result = None
-            prompt = (yield)
+            prompt = yield
 
-            while 1:
+            while True:
                 if isinstance(prompt, console.NotificationPrompt):
                     footer_style = prompt.footer_style
                     seperator = prompt.seperator
@@ -100,6 +100,9 @@ class ConsoleRunner(object):
 
                 result = prompt.apply_default(result)
 
+                # if user validation fails, we re: prompt.
+                # an exception will be raised on validation
+                # failure.
                 try:
                     result = prompt.process_value(result)
                 except:

@@ -7,6 +7,11 @@ be styled using CSS.
 
 # Changes
 
+## v0.6.1
+
+Switched to six for compat
+Added travis test for python 3.4
+
 ## v0.6.0
 
 Inputs can now specify duplicate keys and a list will be returned, for example:

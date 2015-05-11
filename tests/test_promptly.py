@@ -7,6 +7,25 @@ from .runner import run
 
 class TestPromptly(unittest.TestCase):
 
+    def x_console_runner(self):
+        ''' Disabled by default, to be used
+        only when running from a shell by a user
+        '''
+        form = Form()
+
+        form.add.string(
+            'name',
+            'What is your name?',
+            default='Aubrey'
+        )
+
+        form.add.int(
+            'name',
+            'What is your age?'
+        )
+
+        console.run(form)
+
     def test_form_len(self):
         form = Form()
 
